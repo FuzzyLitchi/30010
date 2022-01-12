@@ -2,5 +2,7 @@
 #include "30010_io.h" 		// Input/output library for this course
 
 int main(void) {
-    while(1){}
+    while(1){
+    	// I am sane
+    }
 }
