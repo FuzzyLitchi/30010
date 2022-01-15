@@ -13,4 +13,7 @@ void blink(int enable);
 
 void inverse(int enable);
 
+void hide_cursor();
+void home_cursor();
+
 #endif /* _ANSI_H_ */

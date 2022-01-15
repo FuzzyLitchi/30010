@@ -35,3 +35,11 @@ void inverse(int enable) {
         printf("\x1B[27m");
     }
 }
+
+void home_cursor() {
+	printf("\x1B[H");
+}
+
+void hide_cursor() {
+	printf("\x1B[?25l");
+}

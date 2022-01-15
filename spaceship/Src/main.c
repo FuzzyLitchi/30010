@@ -2,17 +2,21 @@
 #include "stm32f30x_conf.h" // STM32 config
 #include "30010_io.h" 		// Input/output library for this course
 #include "joystick.h"
+#include "graphics.h"
 
-volatile int32_t centiseconds = 0;
+// We pick to run our game at 30 Hz, which means each frame is 33.33 ms
+#define FRAME_DURATION 33
+
+volatile int32_t milliseconds = 0;
 
 // Timer 2's interupt
 void TIM2_IRQHandler() {
-    centiseconds++;
+    milliseconds++;
 
     TIM2->SR &= ~0x0001;
 }
 
-int print_formated_centiseconds(int32_t now) {
+void print_formated_centiseconds(int32_t now) {
     char centis = now % 100;
     char seconds = (now / 100) % 60;
     char minutes = (now / 6000) % 60;
@@ -20,26 +24,13 @@ int print_formated_centiseconds(int32_t now) {
     printf("%02d:%02d:%02d.%03d\n", hours, minutes, seconds, centis);
 }
 
-int main(void) {
-    lcd_init();
-    uart_init(9600);
-    init_joystick();
-
-    clrscr();
-
-    uint8_t buffer[512];
-    for (int i = 0; i < 512; i++) {
-        buffer[i] = (uint8_t) i;
-    }
-
-    lcd_push_buffer(&buffer);
-
+void timer_init() {
     // Set up clock with 100Hz frequency
     RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2
     // No remapping, No clock division, Not buffered, Edge-aligned, Up-counting mode,
     // One-pulse mode disabled, Any update request source, update events disabled
     TIM2->CR1 = 0x0000;
-    TIM2->ARR = 640000 - 1;
+    TIM2->ARR = 64000 - 1;
     TIM2->PSC = 0;
     // Enable interrupt
     TIM2->DIER |= 0x0001;
@@ -48,69 +39,48 @@ int main(void) {
 
     // Enable timer
     TIM2->CR1 = 0x0001;
+}
 
-    int32_t split1_acc = 0;
-    int32_t split2_acc = 0;
+int main(void) {
+    uart_init(1024000);
+    timer_init();
 
-    int32_t split1_offset = 0;
-    int32_t split2_offset = 0;
+    clrscr();
+    hide_cursor();
 
-    // 0 is no one selected, 1 is split 1, 2 is split 2
-    char selected = 0;
+    graphics_data_t graphics_ctx = graphics_init();
 
-    while(1){
-        int input = read_joystick();
+    // The current frame we're on
+    int frame = 0;
+    while(1) {
+    	// Get input
+    	// TODO
 
-        if (input == 0b10000) {
-            TIM2->CR1 ^= 0x0001;
-        } else if (input & 0b0100) {
-            // Split time 1
-            if (selected == 2) {
-                split2_acc += centiseconds - split2_offset;
-            }
+    	// Update world
+    	// TODO
 
-            if (selected != 1) {
-                split1_offset = centiseconds;
-            }
-            selected = 1;
-        } else if (input & 0b1000) {
-            // Split time 2
-            if (selected == 1) {
-                split1_acc += centiseconds - split1_offset;
-            }
+    	// Render world (into buffer)
+    	// TODO
+    	graphics_ctx.buffer[1][0] = 31;
+    	graphics_ctx.buffer[2][1] = 31;
 
-            if (selected != 2) {
-                split2_offset = centiseconds;
-            }
-            selected = 2;
-        } else if (input & 0b0010) {
-            // Stop clock and set time to 0:00
-            TIM2->CR1 = 0x0000;
-            centiseconds = 0;
-            split1_acc = 0;
-            split2_acc = 0;
-            selected = 0;
-        }
+    	graphics_ctx.buffer[12][12] = 31;
+    	graphics_ctx.buffer[13][13] = 31;
+    	graphics_ctx.buffer[14][14] = 31;
+    	graphics_ctx.buffer[15][15] = 31;
 
-        // Roughly every second we print the current time
-        if (centiseconds % 10 == 0) {
-            gotoxy(1,1);
-            printf("Time:    ");
-            print_formated_centiseconds(centiseconds);
+    	// Send rendered world over USART
+    	graphics_show(&graphics_ctx);
 
-            printf("Split 1: ");
-            if (selected == 1) {
-                print_formated_centiseconds(split1_acc + centiseconds - split1_offset);
-            } else {
-                print_formated_centiseconds(split1_acc);
-            }
+    	// Clean (get ready for next frame)
+    	printf("\x1B[32m%d", frame);
+    	frame++;
+    	graphics_clear(&graphics_ctx);
 
-            printf("Split 2: ");
-            if (selected == 2) {
-                print_formated_centiseconds(split2_acc + centiseconds - split2_offset);
-            } else {
-                print_formated_centiseconds(split2_acc);
-            }
-        }
+    	// wait until next frame
+    	while (milliseconds < frame * FRAME_DURATION) {
+
+    	}
     }
 }
+
