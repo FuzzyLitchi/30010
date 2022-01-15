@@ -4,6 +4,7 @@
 #include "joystick.h"
 #include "graphics.h"
 #include "input.h"
+#include "player.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
@@ -54,18 +55,6 @@ void print_binary(int16_t value) {
 	}
 }
 
-static char data[] = {
-	36, 96, 96,  0,  0,
-	 0, 36, 36, 36, 36,
-	 0, 36, 36, 36, 36,
-	36, 36, 36,  0,  0
-};
-static sprite_t player = {
-	.width = 5,
-	.height = 4,
-	.data = (char*) &data,
-};
-
 int main(void) {
     uart_init(1024000);
     timer_init();
@@ -78,6 +67,8 @@ int main(void) {
     graphics_data_t graphics_state = graphics_init();
     input_data_t input_state = input_init();
 
+    player_data_t player_state = player_init();
+
     // The current frame we're on
     int frame = 0;
     while(1) {
@@ -88,11 +79,10 @@ int main(void) {
     	}
 
     	// Update world
-    	// TODO
+    	player_update(&player_state, &input_state);
 
     	// Render world (into buffer)
-    	// TODO
-    	graphics_draw_sprite(&graphics_state, player, frame/4, frame/4);
+    	player_draw(&player_state, &graphics_state);
 
     	// Send rendered world over USART
     	graphics_show(&graphics_state);

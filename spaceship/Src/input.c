@@ -2,12 +2,16 @@
 #include "input.h"
 
  // Checks if the specified key is down in the specified frame.
-char is_down(uint16_t pressed, char key) {
+char _is_down(uint16_t pressed, char key) {
 	return (pressed >> key) & 1;
 }
 
+char is_down(input_data_t* state, char key) {
+	return _is_down(state->current_frame, key);
+}
+
 char just_pressed(input_data_t* state, char key) {
-	return !is_down(state->last_frame, key) && is_down(state->current_frame, key);
+	return !_is_down(state->last_frame, key) && _is_down(state->current_frame, key);
 }
 
 input_data_t input_init() {

@@ -1,5 +1,6 @@
 #ifndef _INPUT_H_
 #define _INPUT_H_
+#include <stdint.h>
 
 #define KEY_SPACE 8
 #define KEY_W 7
@@ -18,7 +19,7 @@ typedef struct {
 	uint16_t current_frame;
 } input_data_t;
 
-char is_down(uint16_t pressed, char key);
+char is_down(input_data_t* state, char key);
 
 char just_pressed(input_data_t* state, char key);
 
