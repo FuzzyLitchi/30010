@@ -45,9 +45,20 @@ void graphics_show(graphics_data_t* ctx) {
 	}
 }
 
+int min(int a, int b) {
+    return a<b ? a : b;
+}
+
+int max(int a, int b) {
+    return a>b ? a : b;
+}
+
 void graphics_draw_sprite(graphics_data_t* ctx, sprite_t sprite, int x, int y) {
-	for (int dx = 0; dx < sprite.width; dx++) {
-		for (int dy = 0; dy < sprite.height; dy++) {
+	int visible_width = min(sprite.width, GRAPHICS_WIDTH-x);
+	int visible_height = min(sprite.height, GRAPHICS_HEIGHT-y);
+
+	for (int dx = 0; dx < visible_width; dx++) {
+		for (int dy = 0; dy < visible_height; dy++) {
 			char byte = *(sprite.data + sprite.width * dy + dx);
 			if (byte != GRAPHICS_TRANSPARENT) {
 				ctx->buffer[x+dx][y+dy] = byte;

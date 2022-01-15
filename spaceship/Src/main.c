@@ -92,7 +92,7 @@ int main(void) {
 
     	// Render world (into buffer)
     	// TODO
-    	graphics_draw_sprite(&graphics_state, player, frame/5, frame/60);
+    	graphics_draw_sprite(&graphics_state, player, frame/4, frame/4);
 
     	// Send rendered world over USART
     	graphics_show(&graphics_state);
