@@ -3,9 +3,12 @@
 #include "30010_io.h" 		// Input/output library for this course
 #include "joystick.h"
 #include "graphics.h"
+#include "input.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
+// Run using debug features
+#define DEBUG_GAME_INFO
 
 volatile int32_t milliseconds = 0;
 
@@ -41,6 +44,16 @@ void timer_init() {
     TIM2->CR1 = 0x0001;
 }
 
+void print_binary(int16_t value) {
+	for (char i = 0; i < 16; i++) {
+		if ((value >> i) & 1) {
+			uart_put_char('1');
+		} else {
+			uart_put_char('0');
+		}
+	}
+}
+
 int main(void) {
     uart_init(1024000);
     timer_init();
@@ -48,34 +61,49 @@ int main(void) {
     clrscr();
     hide_cursor();
 
-    graphics_data_t graphics_ctx = graphics_init();
+    graphics_data_t graphics_state = graphics_init();
+    input_data_t input_state = input_init();
 
     // The current frame we're on
     int frame = 0;
     while(1) {
     	// Get input
-    	// TODO
+    	if (frame % 2) {
+    		// PuTTY doesn't send the keys very fast so we have to update the input slowly
+    		input_update(&input_state);
+    	}
 
     	// Update world
     	// TODO
 
     	// Render world (into buffer)
     	// TODO
-    	graphics_ctx.buffer[1][0] = 31;
-    	graphics_ctx.buffer[2][1] = 31;
+    	graphics_state.buffer[1][0] = 31;
+    	graphics_state.buffer[2][1] = 31;
 
-    	graphics_ctx.buffer[12][12] = 31;
-    	graphics_ctx.buffer[13][13] = 31;
-    	graphics_ctx.buffer[14][14] = 31;
-    	graphics_ctx.buffer[15][15] = 31;
+    	graphics_state.buffer[12][12] = 31;
+    	graphics_state.buffer[13][13] = 31;
+    	graphics_state.buffer[14][14] = 31;
+    	graphics_state.buffer[15][15] = 31;
 
     	// Send rendered world over USART
-    	graphics_show(&graphics_ctx);
+    	graphics_show(&graphics_state);
 
     	// Clean (get ready for next frame)
-    	printf("\x1B[32m%d", frame);
     	frame++;
-    	graphics_clear(&graphics_ctx);
+    	graphics_clear(&graphics_state);
+
+#ifdef DEBUG_GAME_INFO
+    	// Debug info
+    	set_colors(32, 40);
+    	printf("Frame number: %d\n", frame-1);
+    	printf("ms left: %ld\n", (frame)*FRAME_DURATION - milliseconds);
+    	printf("This frame: ");
+    	print_binary(input_state.current_frame);
+    	printf("\nLast frame: ");
+    	print_binary(input_state.last_frame);
+    	uart_put_char('\n');
+#endif
 
     	// wait until next frame
     	while (milliseconds < frame * FRAME_DURATION) {

@@ -15,5 +15,6 @@ void inverse(int enable);
 
 void hide_cursor();
 void home_cursor();
+void set_colors(char fg, char gb);
 
 #endif /* _ANSI_H_ */

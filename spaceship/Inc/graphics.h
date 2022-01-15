@@ -6,7 +6,7 @@
 #define GRAPHICS_HEIGHT 64
 
 // Black
-#define BACKGROUND_COLOR 30
+#define BACKGROUND_COLOR 90
 
 typedef struct {
 	char buffer[GRAPHICS_WIDTH][GRAPHICS_HEIGHT];

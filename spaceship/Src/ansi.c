@@ -43,3 +43,7 @@ void home_cursor() {
 void hide_cursor() {
 	printf("\x1B[?25l");
 }
+
+void set_colors(char fg, char bg) {
+	printf("\x1B[%d;%dm", fg, bg);
+}
