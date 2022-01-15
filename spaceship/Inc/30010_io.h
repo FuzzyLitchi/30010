@@ -16,6 +16,7 @@
 /****************************/
 void uart_init(uint32_t baud);
 void uart_put_char(uint8_t c);
+void uart_put_string(char* s);
 uint8_t uart_get_char();
 uint8_t uart_get_count();
 void uart_clear();

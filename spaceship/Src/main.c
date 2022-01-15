@@ -54,10 +54,24 @@ void print_binary(int16_t value) {
 	}
 }
 
+static char data[] = {
+	36, 96, 96,  0,  0,
+	 0, 36, 36, 36, 36,
+	 0, 36, 36, 36, 36,
+	36, 36, 36,  0,  0
+};
+static sprite_t player = {
+	.width = 5,
+	.height = 4,
+	.data = (char*) &data,
+};
+
 int main(void) {
     uart_init(1024000);
     timer_init();
 
+    // Set the background color to black so that we clear with black.
+    set_colors(37, 40);
     clrscr();
     hide_cursor();
 
@@ -78,13 +92,7 @@ int main(void) {
 
     	// Render world (into buffer)
     	// TODO
-    	graphics_state.buffer[1][0] = 31;
-    	graphics_state.buffer[2][1] = 31;
-
-    	graphics_state.buffer[12][12] = 31;
-    	graphics_state.buffer[13][13] = 31;
-    	graphics_state.buffer[14][14] = 31;
-    	graphics_state.buffer[15][15] = 31;
+    	graphics_draw_sprite(&graphics_state, player, frame/5, frame/60);
 
     	// Send rendered world over USART
     	graphics_show(&graphics_state);
@@ -96,13 +104,13 @@ int main(void) {
 #ifdef DEBUG_GAME_INFO
     	// Debug info
     	set_colors(32, 40);
-    	printf("Frame number: %d\n", frame-1);
-    	printf("ms left: %ld\n", (frame)*FRAME_DURATION - milliseconds);
-    	printf("This frame: ");
+    	printf("     Frame: %d\n", frame-1);
+    	printf("   ms left: %ld\n", (frame)*FRAME_DURATION - milliseconds);
+    	uart_put_string("This frame: ");
     	print_binary(input_state.current_frame);
-    	printf("\nLast frame: ");
+    	uart_put_string("\n\rLast frame: ");
     	print_binary(input_state.last_frame);
-    	uart_put_char('\n');
+    	uart_put_string("\n\r");
 #endif
 
     	// wait until next frame

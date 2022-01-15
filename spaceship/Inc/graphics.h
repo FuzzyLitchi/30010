@@ -12,8 +12,16 @@ typedef struct {
 	char buffer[GRAPHICS_WIDTH][GRAPHICS_HEIGHT];
 } graphics_data_t;
 
+typedef struct {
+	char width;
+	char height;
+	char* data;
+} sprite_t ;
+
 graphics_data_t graphics_init();
 void graphics_clear(graphics_data_t* ctx);
 void graphics_show(graphics_data_t* ctx);
+
+void graphics_draw_sprite(graphics_data_t* ctx, sprite_t sprite, int x, int y);
 
 #endif // _GRAPHICS_H_

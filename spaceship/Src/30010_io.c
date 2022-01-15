@@ -22,6 +22,13 @@ void uart_put_char(uint8_t c) {
     while(USART_GetFlagStatus(USART2, USART_FLAG_TXE)  == RESET){}
 }
 
+void uart_put_string(char* s) {
+	while (*s != 0) {
+		uart_put_char(*s);
+		s++;
+	}
+}
+
 int _write_r(struct _reent *r, int file, char *ptr, int len) {
     int n;
 
