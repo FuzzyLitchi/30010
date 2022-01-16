@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
+#include "projectiles.h"
 
 #define PLAYER_WIDTH 5
 #define PLAYER_HEIGHT 4
@@ -31,7 +32,8 @@ player_state_t player_init() {
 
 void player_update(
 	player_state_t* player_state,
-	input_state_t* input_state
+	input_state_t* input_state,
+	projectiles_state_t* projectiles_state
 ) {
 	vector_t acceleration = vector_from_whole(0, 0);
 
@@ -73,6 +75,18 @@ void player_update(
 		vector_from_whole(0, 0),
 		vector_from_whole(GRAPHICS_WIDTH-PLAYER_WIDTH, GRAPHICS_HEIGHT-PLAYER_HEIGHT)
 	);
+
+
+	// Shooting
+
+	if (just_pressed(input_state, KEY_SPACE)) {
+		projectile_t projectile = {
+			.color = 36,
+			.position = player_state->position,
+			.velocity = vector_from_whole(10, 0)
+		};
+		projectiles_add(projectiles_state, projectile);
+	}
 }
 
 void player_draw(

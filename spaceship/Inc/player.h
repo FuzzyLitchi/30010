@@ -3,6 +3,7 @@
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
+#include "projectiles.h"
 
 typedef struct {
 	sprite_t sprite;
@@ -15,7 +16,8 @@ player_state_t player_init();
 
 void player_update(
 	player_state_t* player_state,
-	input_state_t* input_state
+	input_state_t* input_state,
+	projectiles_state_t* projectiles_state
 );
 
 void player_draw(

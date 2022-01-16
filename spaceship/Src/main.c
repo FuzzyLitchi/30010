@@ -5,9 +5,10 @@
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
+#include "random.h"
 #include "player.h"
 #include "enemy.h"
-#include "random.h"
+#include "projectiles.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
@@ -74,6 +75,7 @@ int main(void) {
 
     player_state_t player_state = player_init();
     enemy_state_t enemy_state = enemy_init();
+    projectiles_state_t projectiles_state = projectiles_init();
 
     // The current frame we're on
     int frame = 0;
@@ -85,12 +87,14 @@ int main(void) {
     	}
 
     	// Update world
-    	player_update(&player_state, &input_state);
+    	player_update(&player_state, &input_state, &projectiles_state);
     	enemy_update(&enemy_state, &player_state, &random_state);
+    	projectiles_update(&projectiles_state);
 
     	// Render world (into buffer)
     	enemy_draw(&enemy_state, &graphics_state);
     	player_draw(&player_state, &graphics_state);
+    	projectiles_draw(&projectiles_state, &graphics_state);
 
     	// Send rendered world over USART
     	graphics_show(&graphics_state);
