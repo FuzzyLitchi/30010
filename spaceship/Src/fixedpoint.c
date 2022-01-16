@@ -27,7 +27,7 @@ void fp_print(fixedpoint_t n) {
         n = ~n + 1;
     }
 
-    printf("%d", FP_WHOLE(n));
+    printf("%ld", FP_WHOLE(n));
 
     uint32_t number = FP_FRACTIONAL(n);
 	if (number) {
@@ -50,4 +50,20 @@ vector_t vector_from_whole(int16_t x, int16_t y) {
 	};
 
 	return vector;
+}
+
+fixedpoint_t fp_min(fixedpoint_t a, fixedpoint_t b) {
+    return a<b ? a : b;
+}
+
+fixedpoint_t fp_max(fixedpoint_t a, fixedpoint_t b) {
+    return a>b ? a : b;
+}
+
+void clamp_vector(vector_t* vector, vector_t lower_bound, vector_t upper_bound) {
+	fixedpoint_t x = vector->x;
+	vector->x = fp_min(upper_bound.x, fp_max(lower_bound.x, x));
+
+	fixedpoint_t y = vector->y;
+	vector->y = fp_min(upper_bound.y, fp_max(lower_bound.y, y));
 }

@@ -24,9 +24,12 @@ typedef struct {
 // fp stands for fixed-point
 fixedpoint_t fp_mul(fixedpoint_t a, fixedpoint_t b);
 int32_t fp_round(fixedpoint_t n);
+fixedpoint_t fp_min(fixedpoint_t a, fixedpoint_t b);
+fixedpoint_t fp_max(fixedpoint_t a, fixedpoint_t b);
 
 void fp_print(fixedpoint_t n);
 
 vector_t vector_from_whole(int16_t x, int16_t y);
+void clamp_vector(vector_t* vector, vector_t lower_bound, vector_t upper_bound);
 
 #endif

@@ -4,8 +4,9 @@
 #include "joystick.h"
 #include "graphics.h"
 #include "input.h"
-#include "player.h"
 #include "fixedpoint.h"
+#include "player.h"
+#include "enemy.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
@@ -69,6 +70,7 @@ int main(void) {
     input_data_t input_state = input_init();
 
     player_data_t player_state = player_init();
+    enemy_data_t enemy_state = enemy_init();
 
     // The current frame we're on
     int frame = 0;
@@ -81,8 +83,10 @@ int main(void) {
 
     	// Update world
     	player_update(&player_state, &input_state);
+    	enemy_update(&enemy_state);
 
     	// Render world (into buffer)
+    	enemy_draw(&enemy_state, &graphics_state);
     	player_draw(&player_state, &graphics_state);
 
     	// Send rendered world over USART

@@ -3,6 +3,9 @@
 #include "input.h"
 #include "fixedpoint.h"
 
+#define PLAYER_WIDTH 5
+#define PLAYER_HEIGHT 4
+
 static char data[] = {
 	36, 96, 96,  0,  0,
 	 0, 36, 36, 36, 36,
@@ -63,6 +66,13 @@ void player_update(
 	// Update position
 	player_state->position.x += player_state->velocity.x / 30;
 	player_state->position.y += player_state->velocity.y / 30;
+
+	// Limit position
+	clamp_vector(
+		&player_state->position,
+		vector_from_whole(0, 0),
+		vector_from_whole(GRAPHICS_WIDTH-PLAYER_WIDTH, GRAPHICS_HEIGHT-PLAYER_HEIGHT)
+	);
 }
 
 void player_draw(
