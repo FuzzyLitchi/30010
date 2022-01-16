@@ -3,23 +3,38 @@
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
+#include "random.h"
+#include "player.h"
+
+typedef enum {
+	ACTION_APPROACHING,
+	ACTION_FLEEING,
+	ACTION_SHOOTING,
+	ACTION_IDLE
+} action_t ;
 
 typedef struct {
 	sprite_t sprite;
 	vector_t position;
 	vector_t velocity;
-} enemy_data_t;
+
+	// AI State Machine
+	action_t action;
+	int time_until_next_action;
+} enemy_state_t;
 
 
-enemy_data_t enemy_init();
+enemy_state_t enemy_init();
 
 void enemy_update(
-	enemy_data_t* enemy_state
+	enemy_state_t* enemy_state,
+	player_state_t* player_state,
+	random_state_t* random_state
 );
 
 void enemy_draw(
-	enemy_data_t* enemy_state,
-	graphics_data_t* graphics_state
+	enemy_state_t* enemy_state,
+	graphics_state_t* graphics_state
 );
 
 #endif

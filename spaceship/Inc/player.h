@@ -8,19 +8,19 @@ typedef struct {
 	sprite_t sprite;
 	vector_t position;
 	vector_t velocity;
-} player_data_t;
+} player_state_t;
 
 
-player_data_t player_init();
+player_state_t player_init();
 
 void player_update(
-	player_data_t* player_state,
-	input_data_t* input_state
+	player_state_t* player_state,
+	input_state_t* input_state
 );
 
 void player_draw(
-	player_data_t* player_state,
-	graphics_data_t* graphics_state
+	player_state_t* player_state,
+	graphics_state_t* graphics_state
 );
 
 #endif

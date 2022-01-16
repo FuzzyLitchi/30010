@@ -17,13 +17,13 @@
 typedef struct {
 	uint16_t last_frame;
 	uint16_t current_frame;
-} input_data_t;
+} input_state_t;
 
-char is_down(input_data_t* state, char key);
+char is_down(input_state_t* state, char key);
 
-char just_pressed(input_data_t* state, char key);
+char just_pressed(input_state_t* state, char key);
 
-input_data_t input_init();
-void input_update(input_data_t* state);
+input_state_t input_init();
+void input_update(input_state_t* state);
 
 #endif

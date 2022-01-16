@@ -1,12 +1,13 @@
 #include <ansi.h>
+#include <gpio.h>
 #include "stm32f30x_conf.h" // STM32 config
 #include "30010_io.h" 		// Input/output library for this course
-#include "joystick.h"
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
 #include "player.h"
 #include "enemy.h"
+#include "random.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
@@ -47,8 +48,8 @@ void timer_init() {
     TIM2->CR1 = 0x0001;
 }
 
-void print_binary(int16_t value) {
-	for (char i = 0; i < 16; i++) {
+void print_binary(uint16_t value) {
+	for (int i = 16; i > 0; i--) {
 		if ((value >> i) & 1) {
 			uart_put_char('1');
 		} else {
@@ -66,11 +67,13 @@ int main(void) {
     clrscr();
     hide_cursor();
 
-    graphics_data_t graphics_state = graphics_init();
-    input_data_t input_state = input_init();
+    random_state_t random_state = random_init();
 
-    player_data_t player_state = player_init();
-    enemy_data_t enemy_state = enemy_init();
+    graphics_state_t graphics_state = graphics_init();
+    input_state_t input_state = input_init();
+
+    player_state_t player_state = player_init();
+    enemy_state_t enemy_state = enemy_init();
 
     // The current frame we're on
     int frame = 0;
@@ -83,7 +86,7 @@ int main(void) {
 
     	// Update world
     	player_update(&player_state, &input_state);
-    	enemy_update(&enemy_state);
+    	enemy_update(&enemy_state, &player_state, &random_state);
 
     	// Render world (into buffer)
     	enemy_draw(&enemy_state, &graphics_state);

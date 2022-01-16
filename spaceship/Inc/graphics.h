@@ -10,7 +10,7 @@
 
 typedef struct {
 	char buffer[GRAPHICS_WIDTH][GRAPHICS_HEIGHT];
-} graphics_data_t;
+} graphics_state_t;
 
 typedef struct {
 	char width;
@@ -18,10 +18,10 @@ typedef struct {
 	char* data;
 } sprite_t ;
 
-graphics_data_t graphics_init();
-void graphics_clear(graphics_data_t* ctx);
-void graphics_show(graphics_data_t* ctx);
+graphics_state_t graphics_init();
+void graphics_clear(graphics_state_t* ctx);
+void graphics_show(graphics_state_t* ctx);
 
-void graphics_draw_sprite(graphics_data_t* ctx, sprite_t sprite, int x, int y);
+void graphics_draw_sprite(graphics_state_t* ctx, sprite_t sprite, int x, int y);
 
 #endif // _GRAPHICS_H_

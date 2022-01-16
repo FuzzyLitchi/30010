@@ -6,20 +6,20 @@ char _is_down(uint16_t pressed, char key) {
 	return (pressed >> key) & 1;
 }
 
-char is_down(input_data_t* state, char key) {
+char is_down(input_state_t* state, char key) {
 	return _is_down(state->current_frame, key);
 }
 
-char just_pressed(input_data_t* state, char key) {
+char just_pressed(input_state_t* state, char key) {
 	return !_is_down(state->last_frame, key) && _is_down(state->current_frame, key);
 }
 
-input_data_t input_init() {
-	input_data_t state = {0, 0};
+input_state_t input_init() {
+	input_state_t state = {0, 0};
 	return state;
 }
 
-void input_update(input_data_t* state) {
+void input_update(input_state_t* state) {
 	state->last_frame = state->current_frame;
 	uint16_t current = 0;
 

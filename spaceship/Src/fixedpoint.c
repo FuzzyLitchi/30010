@@ -8,6 +8,28 @@ fixedpoint_t fp_mul(fixedpoint_t a, fixedpoint_t b) {
 	return (fixedpoint_t)((int64_t)a * (int64_t)b >> FP_DECIMAL_BITS);
 }
 
+fixedpoint_t fp_div(fixedpoint_t a, fixedpoint_t b) {
+	return (fixedpoint_t)(((int64_t)a << FP_DECIMAL_BITS) / (int64_t)b);
+}
+
+fixedpoint_t fp_sqrt(fixedpoint_t n) {
+	fixedpoint_t left = 0;
+	fixedpoint_t right = n + 1;
+
+	while (left != right - 1) {
+		fixedpoint_t middle = (left + right) / 2;
+
+		int64_t res = (int64_t)middle * (int64_t)middle >> FP_DECIMAL_BITS;
+		if(res <= (int64_t)n) {
+			left = middle;
+		} else {
+			right = middle;
+		}
+	}
+
+	return left;
+}
+
 // Round to the neareast whole number, and return the value as an integer.
 // Implements this algorithm: https://en.wikipedia.org/wiki/Rounding#Round_half_up
 int32_t fp_round(fixedpoint_t n) {
@@ -52,6 +74,13 @@ vector_t vector_from_whole(int16_t x, int16_t y) {
 	return vector;
 }
 
+vector_t vector_sub(vector_t* a, vector_t* b) {
+	vector_t res;
+	res.x = a->x - b->x;
+	res.y = a->y - b->y;
+	return res;
+}
+
 fixedpoint_t fp_min(fixedpoint_t a, fixedpoint_t b) {
     return a<b ? a : b;
 }
@@ -66,4 +95,15 @@ void clamp_vector(vector_t* vector, vector_t lower_bound, vector_t upper_bound) 
 
 	fixedpoint_t y = vector->y;
 	vector->y = fp_min(upper_bound.y, fp_max(lower_bound.y, y));
+}
+
+fixedpoint_t vector_get_length(vector_t* vector) {
+	// sqrt(x**2 + y**2)
+	return fp_sqrt(fp_mul(vector->x, vector->x) + fp_mul(vector->y, vector->y));
+}
+
+void vector_set_length(vector_t* vector, fixedpoint_t length) {
+	fixedpoint_t current_length = vector_get_length(vector);
+	vector->x = fp_mul(vector->x, fp_div(length, current_length));
+	vector->y = fp_mul(vector->y, fp_div(length, current_length));
 }

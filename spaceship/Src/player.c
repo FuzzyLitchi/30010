@@ -20,8 +20,8 @@ static sprite_t player_sprite = {
 };
 
 
-player_data_t player_init() {
-	player_data_t player_state = {
+player_state_t player_init() {
+	player_state_t player_state = {
 		.sprite = player_sprite,
 		.position = vector_from_whole(5, 32),
 		.velocity = vector_from_whole(0, 0),
@@ -30,8 +30,8 @@ player_data_t player_init() {
 }
 
 void player_update(
-	player_data_t* player_state,
-	input_data_t* input_state
+	player_state_t* player_state,
+	input_state_t* input_state
 ) {
 	vector_t acceleration = vector_from_whole(0, 0);
 
@@ -76,8 +76,8 @@ void player_update(
 }
 
 void player_draw(
-	player_data_t* player_state,
-	graphics_data_t* graphics_state
+	player_state_t* player_state,
+	graphics_state_t* graphics_state
 ) {
 	int x = fp_round(player_state->position.x);
 	int y = fp_round(player_state->position.y);

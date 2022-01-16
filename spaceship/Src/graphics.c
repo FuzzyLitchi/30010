@@ -4,14 +4,14 @@
 
 #define GRAPHICS_TRANSPARENT 0
 
-graphics_data_t graphics_init() {
-	graphics_data_t ctx;
+graphics_state_t graphics_init() {
+	graphics_state_t ctx;
 	graphics_clear(&ctx);
 	return ctx;
 }
 
 // Sets every pixel to be the background color
-void graphics_clear(graphics_data_t* ctx) {
+void graphics_clear(graphics_state_t* ctx) {
 	for (int x = 0; x < GRAPHICS_WIDTH; x++) {
 		for (int y = 0; y < GRAPHICS_HEIGHT; y++) {
 			ctx->buffer[x][y] = BACKGROUND_COLOR;
@@ -20,7 +20,7 @@ void graphics_clear(graphics_data_t* ctx) {
 }
 
 // Turns the buffer into commands and sends it over USART
-void graphics_show(graphics_data_t* ctx) {
+void graphics_show(graphics_state_t* ctx) {
 	// Set to some value that represents no color
 	char previous_bg_color = 255;
 	char previous_fg_color = 255;
@@ -66,7 +66,7 @@ int max(int a, int b) {
 //    +---------------+
 //
 // We still draw the X part of the sprite.
-void graphics_draw_sprite(graphics_data_t* ctx, sprite_t sprite, int x, int y) {
+void graphics_draw_sprite(graphics_state_t* ctx, sprite_t sprite, int x, int y) {
 	int cutoff_dx = max(-x, 0);
 	int cutoff_dy = max(-y, 0);
 

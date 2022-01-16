@@ -1,5 +1,5 @@
-#ifndef _JOYSTICK_H_
-#define _JOYSTICK_H_
+#ifndef _GPIO_H_
+#define _GPIO_H_
 
 #include "stm32f30x_conf.h"
 
@@ -19,4 +19,4 @@ char read_joystick();
 
 void init_joystick();
 
-#endif /* _JOYSTICK_H_ */
+#endif /* _GPIO_H_ */
