@@ -53,12 +53,28 @@ int max(int a, int b) {
     return a>b ? a : b;
 }
 
+// Draws the sprite within the area, but only the visible part of the sprite.
+// If a sprite is on the boundary as such:
+//
+//    +---------------+
+//    |               |
+//  OO|XXXX           |
+//   O|XXXXXX         |
+//   O|XXXXXX         |
+//  OO|XXXX           |
+//    |               |
+//    +---------------+
+//
+// We still draw the X part of the sprite.
 void graphics_draw_sprite(graphics_data_t* ctx, sprite_t sprite, int x, int y) {
+	int cutoff_dx = max(-x, 0);
+	int cutoff_dy = max(-y, 0);
+
 	int visible_width = min(sprite.width, GRAPHICS_WIDTH-x);
 	int visible_height = min(sprite.height, GRAPHICS_HEIGHT-y);
 
-	for (int dx = 0; dx < visible_width; dx++) {
-		for (int dy = 0; dy < visible_height; dy++) {
+	for (int dx = cutoff_dx; dx < visible_width; dx++) {
+		for (int dy = cutoff_dy; dy < visible_height; dy++) {
 			char byte = *(sprite.data + sprite.width * dy + dx);
 			if (byte != GRAPHICS_TRANSPARENT) {
 				ctx->buffer[x+dx][y+dy] = byte;

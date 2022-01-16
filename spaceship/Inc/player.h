@@ -2,11 +2,12 @@
 #define _PLAYER_H_
 #include "graphics.h"
 #include "input.h"
+#include "fixedpoint.h"
 
 typedef struct {
 	sprite_t sprite;
-	int x;
-	int y;
+	vector_t position;
+	vector_t velocity;
 } player_data_t;
 
 

@@ -5,6 +5,7 @@
 #include "graphics.h"
 #include "input.h"
 #include "player.h"
+#include "fixedpoint.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
