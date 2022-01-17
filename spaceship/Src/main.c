@@ -81,10 +81,7 @@ int main(void) {
     int frame = 0;
     while(1) {
     	// Get input
-    	if (frame % 2) {
-    		// PuTTY doesn't send the keys very fast so we have to update the input slowly
-    		input_update(&input_state);
-    	}
+		input_update(&input_state);
 
     	// Update world
     	player_update(&player_state, &input_state, &projectiles_state);

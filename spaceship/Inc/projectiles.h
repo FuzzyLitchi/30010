@@ -13,7 +13,7 @@ typedef struct {
 
 typedef struct {
 	projectile_t projectiles[MAX_PROJECTILES];
-	uint8_t projectile_count;
+	uint8_t count;
 } projectiles_state_t;
 
 projectiles_state_t projectiles_init();
@@ -22,6 +22,8 @@ void projectiles_add(
 	projectiles_state_t* projectiles_state,
 	projectile_t projectile
 );
+
+void projectiles_remove(projectiles_state_t* projectiles_state, int index);
 
 void projectiles_update(projectiles_state_t* projectiles_state);
 

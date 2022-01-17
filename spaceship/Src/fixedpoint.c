@@ -107,3 +107,22 @@ void vector_set_length(vector_t* vector, fixedpoint_t length) {
 	vector->x = fp_mul(vector->x, fp_div(length, current_length));
 	vector->y = fp_mul(vector->y, fp_div(length, current_length));
 }
+
+// Rectangles
+rectangle_t rectangle_from_whole(int16_t x, int16_t y, int16_t w, int16_t h) {
+	rectangle_t res = {
+		.x = FP_FROM_WHOLE(x),
+		.y = FP_FROM_WHOLE(y),
+		.w = FP_FROM_WHOLE(w),
+		.h = FP_FROM_WHOLE(h),
+	};
+	return res;
+}
+
+// Returns 1 if the rectangle does contain it, 0 otherwise.
+int rectangle_contains(rectangle_t* rectangle, vector_t point) {
+	return point.x > rectangle->x
+	&& point.x < rectangle->x + rectangle->w
+	&& point.y > rectangle->y
+	&& point.y < rectangle->y + rectangle->h;
+}

@@ -21,6 +21,15 @@ typedef struct {
 	fixedpoint_t y;
 } vector_t;
 
+// Axis-alligned rectabgle. Used for collision detection.
+typedef struct {
+	fixedpoint_t x;
+	fixedpoint_t y;
+	fixedpoint_t w;
+	fixedpoint_t h;
+} rectangle_t;
+
+// Fixed-point
 // fp stands for fixed-point
 fixedpoint_t fp_mul(fixedpoint_t a, fixedpoint_t b);
 fixedpoint_t fp_div(fixedpoint_t a, fixedpoint_t b);
@@ -31,6 +40,7 @@ fixedpoint_t fp_max(fixedpoint_t a, fixedpoint_t b);
 
 void fp_print(fixedpoint_t n);
 
+// Vectors
 vector_t vector_from_whole(int16_t x, int16_t y);
 vector_t vector_sub(vector_t* a, vector_t* b);
 void clamp_vector(vector_t* vector, vector_t lower_bound, vector_t upper_bound);
@@ -38,5 +48,8 @@ void clamp_vector(vector_t* vector, vector_t lower_bound, vector_t upper_bound);
 fixedpoint_t vector_get_length(vector_t* vector);
 void vector_set_length(vector_t* vector, fixedpoint_t length);
 
+// Rectangles
+rectangle_t rectangle_from_whole(int16_t x, int16_t y, int16_t w, int16_t h);
+int rectangle_contains(rectangle_t* rectangle, vector_t point);
 
 #endif
