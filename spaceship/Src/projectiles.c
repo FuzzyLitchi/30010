@@ -43,7 +43,7 @@ void projectiles_update(projectiles_state_t* projectiles_state) {
 		}
 
 		// Check if out of bounds
-		if (!rectangle_contains((rectangle_t *) &SCREEN, projectile->position)) {
+		if (!rectangle_contains(SCREEN, projectile->position)) {
 			projectiles_remove(projectiles_state, i);
 		}
 	}

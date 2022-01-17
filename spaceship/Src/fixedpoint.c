@@ -120,9 +120,9 @@ rectangle_t rectangle_from_whole(int16_t x, int16_t y, int16_t w, int16_t h) {
 }
 
 // Returns 1 if the rectangle does contain it, 0 otherwise.
-int rectangle_contains(rectangle_t* rectangle, vector_t point) {
-	return point.x > rectangle->x
-	&& point.x < rectangle->x + rectangle->w
-	&& point.y > rectangle->y
-	&& point.y < rectangle->y + rectangle->h;
+int rectangle_contains(rectangle_t rectangle, vector_t point) {
+	return point.x > rectangle.x
+	&& point.x < rectangle.x + rectangle.w
+	&& point.y > rectangle.y
+	&& point.y < rectangle.y + rectangle.h;
 }

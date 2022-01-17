@@ -32,12 +32,15 @@ void write_output(GPIO_TypeDef *gpio, char pin, char value) {
 
 // Order is Center, Right, Left, Down, Up
 // 0bRLDU
+
+// UP LEFT DOWN RIGHT
 char read_joystick() {
-    return read_input(GPIOA, 4)
-    | (read_input(GPIOB, 0) << 1)
+    return 0
+    | (read_input(GPIOB, 5) << 4)
+    | (read_input(GPIOA, 4) << 3)
     | (read_input(GPIOC, 1) << 2)
-    | (read_input(GPIOC, 0) << 3)
-    | (read_input(GPIOB, 5) << 4);
+    | (read_input(GPIOB, 0) << 1)
+    | (read_input(GPIOC, 0) << 0);
 }
 
 void init_joystick() {

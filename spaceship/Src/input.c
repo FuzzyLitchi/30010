@@ -1,5 +1,6 @@
 #include "30010_io.h"
 #include "input.h"
+#include "gpio.h"
 
  // Checks if the specified key is down in the specified frame.
 char _is_down(uint16_t pressed, char key) {
@@ -15,6 +16,8 @@ char just_pressed(input_state_t* state, char key) {
 }
 
 input_state_t input_init() {
+	init_joystick();
+
 	input_state_t state = {0, 0};
 	return state;
 }
@@ -23,6 +26,10 @@ void input_update(input_state_t* state) {
 	state->last_frame = state->current_frame;
 	uint16_t current = 0;
 
+	// Joystick
+	current |= read_joystick() << 4;
+
+	// Keyboard
 	while (1) {
 		uint8_t c = uart_get_char();
 		switch (c) {

@@ -1,7 +1,7 @@
 #ifndef _GRAPHICS_H_
 #define _GRAPHICS_H_
 
-#define GRAPHICS_WIDTH 64
+#define GRAPHICS_WIDTH 80
 // Height must be an even number
 #define GRAPHICS_HEIGHT 64
 
