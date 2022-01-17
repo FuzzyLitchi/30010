@@ -7,6 +7,9 @@
 #define PLAYER_WIDTH 5
 #define PLAYER_HEIGHT 4
 
+#define PLAYER_SPEED 40
+#define PLAYER_FRICTION_INV 10
+
 static char data[] = {
 	36, 96, 96,  0,  0,
 	 0, 36, 36, 36, 36,
@@ -38,28 +41,23 @@ void player_update(
 	vector_t acceleration = vector_from_whole(0, 0);
 
 	if (is_down(input_state, KEY_W)) {
-		acceleration.y -= FP_FROM_WHOLE(20);
+		acceleration.y -= FP_FROM_WHOLE(PLAYER_SPEED);
 	}
 	if (is_down(input_state, KEY_A)) {
-		acceleration.x -= FP_FROM_WHOLE(20);
+		acceleration.x -= FP_FROM_WHOLE(PLAYER_SPEED);
 	}
 	if (is_down(input_state, KEY_S)) {
-		acceleration.y += FP_FROM_WHOLE(20);
+		acceleration.y += FP_FROM_WHOLE(PLAYER_SPEED);
 	}
 	if (is_down(input_state, KEY_D)) {
-		acceleration.x += FP_FROM_WHOLE(20);
+		acceleration.x += FP_FROM_WHOLE(PLAYER_SPEED);
 	}
 
-	if (
-		!is_down(input_state, KEY_W)
-		&& !is_down(input_state, KEY_A)
-		&& !is_down(input_state, KEY_S)
-		&& !is_down(input_state, KEY_D)
-	) {
-		// If we're not going anywhere, deccelerate.
-		acceleration.x -= player_state->velocity.x;
-		acceleration.y -= player_state->velocity.y;
-	}
+	// Apply friction
+	fixedpoint_t length = vector_get_length(&player_state->velocity);
+	acceleration.x -= fp_mul(player_state->velocity.x, length) / PLAYER_FRICTION_INV;
+	acceleration.y -= fp_mul(player_state->velocity.y, length) / PLAYER_FRICTION_INV;
+
 
 	// Apply acceleration
 	player_state->velocity.x += acceleration.x / 30;

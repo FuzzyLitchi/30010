@@ -28,6 +28,7 @@ enemy_state_t enemy_init();
 
 void enemy_update(
 	enemy_state_t* enemy_state,
+	projectiles_state_t* projectile_state,
 	player_state_t* player_state,
 	random_state_t* random_state
 );

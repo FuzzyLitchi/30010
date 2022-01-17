@@ -60,7 +60,7 @@ void print_binary(uint16_t value) {
 }
 
 int main(void) {
-    uart_init(1024000);
+    uart_init(2048000);
     timer_init();
 
     // Set the background color to black so that we clear with black.
@@ -85,7 +85,7 @@ int main(void) {
 
     	// Update world
     	player_update(&player_state, &input_state, &projectiles_state);
-    	enemy_update(&enemy_state, &player_state, &random_state);
+    	enemy_update(&enemy_state, &projectiles_state, &player_state, &random_state);
     	projectiles_update(&projectiles_state);
 
     	// Render world (into buffer)

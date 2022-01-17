@@ -2,7 +2,7 @@
 #include "graphics.h"
 #include "fixedpoint.h"
 
-const static rectangle_t SCREEN = {
+const rectangle_t SCREEN = {
 	FP_FROM_WHOLE(0),
 	FP_FROM_WHOLE(0),
 	FP_FROM_WHOLE(GRAPHICS_WIDTH),

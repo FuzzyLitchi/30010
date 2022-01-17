@@ -16,6 +16,11 @@ static char data[] = {
 #define ENEMY_WIDTH 6
 #define ENEMY_HEIGHT 5
 
+#define ENEMY_SPEED FP_FROM_WHOLE(20)
+#define ENEMY_FRICTION_INV 50
+
+#define BULLET_SPEED FP_FROM_WHOLE(20)
+
 static sprite_t enemy_sprite = {
 	.width = 6,
 	.height = 5,
@@ -27,16 +32,15 @@ enemy_state_t enemy_init() {
 		.sprite = enemy_sprite,
 		.position = vector_from_whole(60, 31),
 		.velocity = vector_from_whole(0, 0),
-		.time_until_next_action = 10000,
+		.time_until_next_action = 100,
 		.action = ACTION_APPROACHING
 	};
 	return enemy_state;
 }
 
-#define ENEMY_SPEED FP_FROM_WHOLE(5)
-
 void enemy_update(
 	enemy_state_t* enemy_state,
+	projectiles_state_t* projectile_state,
 	player_state_t* player_state,
 	random_state_t* random_state
 ) {
@@ -57,13 +61,22 @@ void enemy_update(
 		acceleration.y += direction.y;
 		break;
 	case ACTION_SHOOTING:
-		// TODO
-		acceleration.x -= enemy_state->velocity.x;
-		acceleration.y -= enemy_state->velocity.y;
+		// Only shoot 6 times per second
+		if (enemy_state->time_until_next_action % 15 == 0) {
+			direction = vector_sub(&player_state->position, &enemy_state->position);
+			vector_set_length(&direction, BULLET_SPEED);
+
+			projectile_t projectile = {
+				.position = enemy_state->position,
+				.velocity = direction,
+				.color = 95
+			};
+			projectiles_add(projectile_state, projectile);
+			acceleration.x -= enemy_state->velocity.x;
+			acceleration.y -= enemy_state->velocity.y;
+		}
 		break;
 	case ACTION_IDLE:
-		acceleration.x -= enemy_state->velocity.x;
-		acceleration.y -= enemy_state->velocity.y;
 		break;
 	case ACTION_FLEEING:
 		direction = vector_sub(&enemy_state->position, &player_state->position);
@@ -72,6 +85,12 @@ void enemy_update(
 		acceleration.y += direction.y;
 		break;
 	}
+
+#define FRICTION_INV 3
+	// Friction
+	fixedpoint_t length = vector_get_length(&enemy_state->velocity);
+	acceleration.x -= fp_mul(enemy_state->velocity.x, length) / ENEMY_FRICTION_INV;
+	acceleration.y -= fp_mul(enemy_state->velocity.y, length) / ENEMY_FRICTION_INV;
 
 	// Apply acceleration
 	enemy_state->velocity.x += acceleration.x / 30;
