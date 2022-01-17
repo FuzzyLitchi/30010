@@ -7,9 +7,9 @@ There's 16 colors, and we can subdivide each character into 2 pixels (by using â
 ## Game objects
 ### Character
 - Spaceship.
-- Unaffected (or at least less affected) by the gravity field. (Canonical explanation is that the ship computer auto corrects)
+- (Nice to have) Unaffected (or at least less affected) by the gravity field. (Canonical explanation is that the ship computer auto corrects)
 - WASD for moving, arrow keys for aiming/shooting.
-- Shift for switching weapon
+- (Nice to have) Shift for switching weapon
 
 ### Astroid:
 - Can be broken for loot and points.
@@ -27,8 +27,8 @@ There's 16 colors, and we can subdivide each character into 2 pixels (by using â
 - Very little health/shields compared to player.
 - Killing them gives points.
 
-## Weapons:
-### Laser weapon
+## Weapons: (Only make 2)
+### Laser weapon (Nice to have)
 - Bends around black holes.
 - Laser travels at light speed.
 - Drawn using the aseprite pixel perfect algorithm. (https://imgur.com/uiyzvcY)
@@ -39,7 +39,7 @@ There's 16 colors, and we can subdivide each character into 2 pixels (by using â
 - More damage? (Can be fine tuned after play-testing)
 - Uses ammunition.
 
-### Nuclear bomb
+### Nuclear bomb (Not feeling it)
 - It's a nuke.
 - High damage within an area.
 - Very costly.
@@ -81,43 +81,47 @@ And the following on the LCD
 What features/tasks I will do when.
 
 ## 11/01
-- Game design
-- Plan project
+- [X] Game design
+- [X] Plan project
 
 ## 12/01
-- Git repository
-- Rendering system
-- PuTTY input system
-- Game loop
+- [X] Git repository
+- [X] Rendering system
+- [X] PuTTY input system
+- [X] Game loop
 
 ## 13/01
-- Player rendering
-- Fixed point arithmetic API
-- Player movement
+- [X] Player rendering
+- [X] Fixed point arithmetic API
+- [X] Player movement
 
 ## 14/01
-- Enemy rendering
-- Enemy movement
-- Projectiles
-- Enemy death
+- [X] Enemy rendering
+- [X] Enemy movement (+ AI)
+- [X] Projectiles
+- [ ] Enemy bullet
+- [ ] Multiple enemies 
 
 ## 15/01
-- Enemy bullet
-- Player damage/health/death
-- Death screen
-- Boss key
-- Help screen
+- [ ] Enemy death
+- [ ] Player damage/health/death
+- [ ] Death screen
+- [ ] Boss key (MÃ¥ske)
+- [ ] Help screen
+
+MVP, write on report. Flowchart + Blokdiagram.
 
 ## 17/01
-- Gravity
-- Laser
-- Weapon switching
-- Nuke
+- [ ] Laser
+- [ ] Gravity
+- [ ] Weapon switching
+- [ ] Nuke
 
 ## 18/01
-- PuTTY HUD
-- Astroids
-- Loot
+- [ ] LCD HUD
+- [ ] PuTTY HUD
+- [ ] Astroids
+- [ ] Loot
   - Projectile ammunition
   - Repair kit (restores shields/health)
   - Super shields (makes you invulnerable for a limited time)
@@ -125,11 +129,10 @@ What features/tasks I will do when.
   - Extra lives
 
 ## 19/01
-- Buzzer audio
-- Black holes
-- Damage from colliding with black holes + astroids + enemies
-- Points (from killing stuff)
-- LCD HUD
+- [ ] Buzzer audio
+- [ ] Black holes
+- [ ] Damage from colliding with black holes + astroids + enemies
+- [ ] Points (from killing stuff)
 
 ## 20/01
 - Record gameplay
@@ -142,3 +145,7 @@ What features/tasks I will do when.
 
 ## ??/01
 I might need additional time as this is a pretty crammed timeline.
+
+
+
+
