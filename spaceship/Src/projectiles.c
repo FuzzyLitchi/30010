@@ -30,6 +30,14 @@ void projectiles_add(
 	projectiles_state->count++;
 }
 
+void projectiles_remove(projectiles_state_t* projectiles_state, int index) {
+	// Move prjectile i + 1 to projectiles_state->projectile_count back
+	for (int i = index; i < projectiles_state->count - 1; i++) {
+		projectiles_state->projectiles[i] = projectiles_state->projectiles[i+1];
+	}
+	projectiles_state->count--;
+}
+
 void projectiles_update(projectiles_state_t* projectiles_state) {
 	// Loop backwards so we can remove bullets easily
 	for (int i = projectiles_state->count - 1; i >= 0; i--) {
@@ -47,14 +55,6 @@ void projectiles_update(projectiles_state_t* projectiles_state) {
 			projectiles_remove(projectiles_state, i);
 		}
 	}
-}
-
-void projectiles_remove(projectiles_state_t* projectiles_state, int index) {
-	// Move prjectile i + 1 to projectiles_state->projectile_count back
-	for (int i = index; i < projectiles_state->count - 1; i++) {
-		projectiles_state->projectiles[i] = projectiles_state->projectiles[i+1];
-	}
-	projectiles_state->count--;
 }
 
 void projectiles_draw(

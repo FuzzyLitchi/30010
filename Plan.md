@@ -99,8 +99,8 @@ What features/tasks I will do when.
 - [X] Enemy rendering
 - [X] Enemy movement (+ AI)
 - [X] Projectiles
-- [ ] Enemy bullet
-- [ ] Multiple enemies 
+- [X] Enemy bullet
+- [X] Multiple enemies 
 
 ## 15/01
 - [ ] Enemy death
@@ -147,5 +147,16 @@ MVP, write on report. Flowchart + Blokdiagram.
 I might need additional time as this is a pretty crammed timeline.
 
 
+# Improvements
 
+Make the firing phase for AI only fire a max of 5 shots.
 
+## AI plan
+Firing -> (Idle, Approaching)
+Idle -> (Approaching, Firing)
+Approaching -> Firing
+
+Damage -> Flee (sometimes, when under a health limit)
+Flee -> (Flee, Firing)
+
+When ships are outside the screen, they shouldn't be able to fire. But it would be cool if they could come back. I might just make ships that go off screen vanish, as that is easiest. But they'd only vanish if they're Fleeing.
