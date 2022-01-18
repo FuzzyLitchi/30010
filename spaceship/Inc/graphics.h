@@ -5,11 +5,10 @@
 // Height must be an even number
 #define GRAPHICS_HEIGHT 64
 
-// Black
-#define BACKGROUND_COLOR 90
-
 typedef struct {
 	char buffer[GRAPHICS_WIDTH][GRAPHICS_HEIGHT];
+	// We use this color to clear the screen
+	char background_color;
 } graphics_state_t;
 
 typedef struct {

@@ -9,6 +9,8 @@
 #include "player.h"
 #include "enemy.h"
 #include "projectiles.h"
+#include "deathscreen.h"
+#include "gamestate.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
@@ -68,8 +70,10 @@ int main(void) {
     clrscr();
     hide_cursor();
 
-    random_state_t random_state = random_init();
+    gamestate_t gamestate = PLAYING;
+    gamestate_t previous_gamestate = gamestate;
 
+    random_state_t random_state = random_init();
     graphics_state_t graphics_state = graphics_init();
     input_state_t input_state = input_init();
 
@@ -77,21 +81,39 @@ int main(void) {
     enemy_state_t enemy_state = enemy_init();
     projectiles_state_t projectiles_state = projectiles_init();
 
+    deathscreen_state_t deathscreen_state;
+
     // The current frame we're on
     int frame = 0;
     while(1) {
     	// Get input
 		input_update(&input_state);
 
-    	// Update world
-    	player_update(&player_state, &input_state, &projectiles_state);
-    	enemy_update(&enemy_state, &projectiles_state, &player_state, &random_state);
-    	projectiles_update(&projectiles_state, &player_state, &enemy_state);
+		switch (gamestate) {
+		case PLAYING:
+			// Update world
+			player_update(
+				&player_state,
+				&input_state,
+				&projectiles_state,
+				&gamestate
+			);
+			enemy_update(&enemy_state, &projectiles_state, &player_state, &random_state);
+			projectiles_update(&projectiles_state, &player_state, &enemy_state);
 
-    	// Render world (into buffer)
-    	enemy_draw(&enemy_state, &graphics_state);
-    	player_draw(&player_state, &graphics_state);
-    	projectiles_draw(&projectiles_state, &graphics_state);
+			// Render world (into buffer)
+			enemy_draw(&enemy_state, &graphics_state);
+			player_draw(&player_state, &graphics_state);
+			projectiles_draw(&projectiles_state, &graphics_state);
+			break;
+		case DEATH_SCREEN:
+			deathscreen_update(&deathscreen_state, &random_state);
+			deathscreen_draw(&deathscreen_state, &graphics_state);
+			break;
+		case HELP_SCREEN:
+			// TODO
+			break;
+		}
 
     	// Send rendered world over USART
     	graphics_show(&graphics_state);
@@ -99,6 +121,26 @@ int main(void) {
     	// Clean (get ready for next frame)
     	frame++;
     	graphics_clear(&graphics_state);
+
+    	// Check if we've switch gamestate
+    	if (gamestate != previous_gamestate) {
+
+    		// Call exit functions
+    		switch (previous_gamestate) {
+    		default:
+    			break;
+    		}
+
+    		// Call enter functions
+    		switch (gamestate) {
+    		case DEATH_SCREEN:
+    			deathscreen_state = deathscreen_enter(&graphics_state, &random_state);
+    		default:
+    			break;
+    		}
+
+    		previous_gamestate = gamestate;
+    	}
 
 #ifdef DEBUG_GAME_INFO
     	// Debug info

@@ -104,8 +104,8 @@ What features/tasks I will do when.
 
 ## 15/01
 - [X] Enemy death
-- [ ] Player damage/health/death
-- [ ] Death screen
+- [X] Player damage/health/death
+- [X] Death screen
 - [ ] Boss key (Måske)
 - [ ] Help screen
 
@@ -156,8 +156,9 @@ Firing -> (Idle, Approaching)
 Idle -> (Approaching, Firing)
 Approaching -> Firing
 
-Damage -> Flee (sometimes, when under a health limit)
 Flee -> (Flee, Firing)
+Damage   => Flee (sometimes, when under a health limit)
+0 health => Dying (plays little animation and the removes self)
 
 When ships are outside the screen, they shouldn't be able to fire. But it would be cool if they could come back. I might just make ships that go off screen vanish, as that is easiest. But they'd only vanish if they're Fleeing.
 
@@ -165,3 +166,5 @@ When ships are outside the screen, they shouldn't be able to fire. But it would 
 Blue bullets hitting enemies should be instant
 Blue bullets only have self grace
 Purple bullets ???
+    Every bullet has a "shooter" id, 0 is player, 1 and up is enemies
+    Bullets have a grace period but only for the relevant id.

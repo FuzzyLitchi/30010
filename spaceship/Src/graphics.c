@@ -5,16 +5,18 @@
 #define GRAPHICS_TRANSPARENT 0
 
 graphics_state_t graphics_init() {
-	graphics_state_t ctx;
+	graphics_state_t ctx = {
+		.background_color = 90 // Grey
+	};
 	graphics_clear(&ctx);
 	return ctx;
 }
 
 // Sets every pixel to be the background color
-void graphics_clear(graphics_state_t* ctx) {
+void graphics_clear(graphics_state_t* graphics_state) {
 	for (int x = 0; x < GRAPHICS_WIDTH; x++) {
 		for (int y = 0; y < GRAPHICS_HEIGHT; y++) {
-			ctx->buffer[x][y] = BACKGROUND_COLOR;
+			graphics_state->buffer[x][y] = graphics_state->background_color;
 		}
 	}
 }

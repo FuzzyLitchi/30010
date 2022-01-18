@@ -3,11 +3,16 @@
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
+#include "gamestate.h"
 
 typedef struct {
 	sprite_t sprite;
 	vector_t position;
 	vector_t velocity;
+	// If it's 0, we're alive
+	char dead;
+	// A number representing how much health we have
+	int health;
 } player_state_t;
 
 
@@ -24,7 +29,8 @@ player_state_t player_init();
 void player_update(
 	player_state_t* player_state,
 	input_state_t* input_state,
-	projectiles_state_t* projectiles_state
+	projectiles_state_t* projectiles_state,
+	gamestate_t* gamestate
 );
 
 void player_draw(

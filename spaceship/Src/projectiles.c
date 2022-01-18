@@ -51,14 +51,14 @@ void projectiles_update(
 		// Check if we're colling with any enemy
 		for (int j = 0; j < enemy_state->count; j++) {
 			enemy_t* enemy = &enemy_state->enemies[j];
-			rectangle_t enemy_box = {
+			rectangle_t collider_box = {
 				.x = enemy->position.x,
 				.y = enemy->position.y,
 				.w = FP_FROM_WHOLE(enemy->sprite.width),
 				.h = FP_FROM_WHOLE(enemy->sprite.height)
 			};
 
-			if (projectile->grace_frames == 0 && rectangle_contains(enemy_box, projectile->position)) {
+			if (projectile->grace_frames == 0 && rectangle_contains(collider_box, projectile->position)) {
 				// Hit! Apply damage and delete projectile
 				enemy_remove(enemy_state, j); // TODO: Remove healh instead of instant death
 
@@ -67,7 +67,20 @@ void projectiles_update(
 			}
 		}
 		// Check if we're colliding with the player
-		// TODO
+		rectangle_t collider_box = {
+			.x = player_state->position.x,
+			.y = player_state->position.y,
+			.w = FP_FROM_WHOLE(player_state->sprite.width),
+			.h = FP_FROM_WHOLE(player_state->sprite.height)
+		};
+
+		if (projectile->grace_frames == 0 && rectangle_contains(collider_box, projectile->position)) {
+			// Hit! Apply damage and delete projectile
+			player_state->health--; // 1 damage.
+
+			projectiles_remove(projectiles_state, i);
+			goto outer_continue;
+		}
 
 		// Check if out of bounds
 		if (!rectangle_contains(SCREEN, projectile->position)) {

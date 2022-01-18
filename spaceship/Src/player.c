@@ -1,8 +1,4 @@
 #include "player.h"
-#include "graphics.h"
-#include "input.h"
-#include "fixedpoint.h"
-#include "projectiles.h"
 
 #define PLAYER_WIDTH 5
 #define PLAYER_HEIGHT 4
@@ -10,14 +6,14 @@
 #define PLAYER_SPEED 40
 #define PLAYER_FRICTION_INV 10
 
-static char data[] = {
+static const char data[] = {
 	36, 96, 96,  0,  0,
 	 0, 36, 36, 36, 36,
 	 0, 36, 36, 36, 36,
 	36, 36, 36,  0,  0
 };
 
-static sprite_t player_sprite = {
+static const sprite_t player_sprite = {
 	.width = 5,
 	.height = 4,
 	.data = (char*) &data,
@@ -29,6 +25,8 @@ player_state_t player_init() {
 		.sprite = player_sprite,
 		.position = vector_from_whole(5, 32),
 		.velocity = vector_from_whole(0, 0),
+		.dead = 0,
+		.health = 5
 	};
 	return player_state;
 }
@@ -36,7 +34,8 @@ player_state_t player_init() {
 void player_update(
 	player_state_t* player_state,
 	input_state_t* input_state,
-	projectiles_state_t* projectiles_state
+	projectiles_state_t* projectiles_state,
+	gamestate_t* gamestate
 ) {
 	vector_t acceleration = vector_from_whole(0, 0);
 
@@ -76,7 +75,6 @@ void player_update(
 
 
 	// Shooting
-
 	if (just_pressed(input_state, KEY_SPACE)) {
 		projectile_t projectile = {
 			.color = 36,
@@ -86,18 +84,27 @@ void player_update(
 		};
 		projectiles_add(projectiles_state, projectile);
 	}
+
+	// Health
+	if (player_state->health <= 0) {
+		// We're dead
+		player_state->dead = 1;
+		*gamestate = DEATH_SCREEN;
+	}
 }
 
 void player_draw(
 	player_state_t* player_state,
 	graphics_state_t* graphics_state
 ) {
-	int x = fp_round(player_state->position.x);
-	int y = fp_round(player_state->position.y);
-	graphics_draw_sprite(
-		graphics_state,
-		player_state->sprite,
-		x,
-		y
-	);
+	if (!player_state->dead) {
+		int x = fp_round(player_state->position.x);
+		int y = fp_round(player_state->position.y);
+		graphics_draw_sprite(
+			graphics_state,
+			player_state->sprite,
+			x,
+			y
+		);
+	}
 }
