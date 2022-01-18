@@ -81,7 +81,8 @@ void player_update(
 		projectile_t projectile = {
 			.color = 36,
 			.position = player_state->position,
-			.velocity = vector_from_whole(30, 0)
+			.velocity = vector_from_whole(30, 0),
+			.grace_frames = 10
 		};
 		projectiles_add(projectiles_state, projectile);
 	}

@@ -3,7 +3,6 @@
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
-#include "projectiles.h"
 
 typedef struct {
 	sprite_t sprite;
@@ -11,6 +10,14 @@ typedef struct {
 	vector_t velocity;
 } player_state_t;
 
+
+// I have to move some of the includes down here, because there's a circular
+// dependency between the types for the methods. I really feel like C compilers
+// shouldn't be having this problem with modern compilers, but there's probably
+// some arcane reason they can't modify the header parser to lazily parse type
+// names. My solution to this problem is inspired by:
+// https://stackoverflow.com/questions/46150724/circular-dependency-between-c-header-files
+#include "projectiles.h"
 
 player_state_t player_init();
 

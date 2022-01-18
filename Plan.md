@@ -103,7 +103,7 @@ What features/tasks I will do when.
 - [X] Multiple enemies 
 
 ## 15/01
-- [ ] Enemy death
+- [X] Enemy death
 - [ ] Player damage/health/death
 - [ ] Death screen
 - [ ] Boss key (Måske)
@@ -160,3 +160,8 @@ Damage -> Flee (sometimes, when under a health limit)
 Flee -> (Flee, Firing)
 
 When ships are outside the screen, they shouldn't be able to fire. But it would be cool if they could come back. I might just make ships that go off screen vanish, as that is easiest. But they'd only vanish if they're Fleeing.
+
+## Bullets
+Blue bullets hitting enemies should be instant
+Blue bullets only have self grace
+Purple bullets ???

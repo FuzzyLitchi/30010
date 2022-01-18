@@ -1,6 +1,4 @@
 #include "projectiles.h"
-#include "graphics.h"
-#include "fixedpoint.h"
 
 const rectangle_t SCREEN = {
 	FP_FROM_WHOLE(0),
@@ -11,8 +9,8 @@ const rectangle_t SCREEN = {
 
 projectiles_state_t projectiles_init() {
 	projectiles_state_t projectiles_state = {
-			.count = 0,
-			.projectiles = {}
+		.count = 0,
+		.projectiles = {}
 	};
 
 	return projectiles_state;
@@ -38,22 +36,49 @@ void projectiles_remove(projectiles_state_t* projectiles_state, int index) {
 	projectiles_state->count--;
 }
 
-void projectiles_update(projectiles_state_t* projectiles_state) {
+void projectiles_update(
+	projectiles_state_t* projectiles_state,
+	player_state_t* player_state,
+	enemy_state_t* enemy_state
+) {
 	// Loop backwards so we can remove bullets easily
 	for (int i = projectiles_state->count - 1; i >= 0; i--) {
 		projectile_t* projectile = &projectiles_state->projectiles[i];
+		// Update position
 		projectile->position.x += projectile->velocity.x / 30;
 		projectile->position.y += projectile->velocity.y / 30;
 
-		// Check if colliding with a thding
-		if (0) {
-			// TODO: Damage
+		// Check if we're colling with any enemy
+		for (int j = 0; j < enemy_state->count; j++) {
+			enemy_t* enemy = &enemy_state->enemies[j];
+			rectangle_t enemy_box = {
+				.x = enemy->position.x,
+				.y = enemy->position.y,
+				.w = FP_FROM_WHOLE(enemy->sprite.width),
+				.h = FP_FROM_WHOLE(enemy->sprite.height)
+			};
+
+			if (projectile->grace_frames == 0 && rectangle_contains(enemy_box, projectile->position)) {
+				// Hit! Apply damage and delete projectile
+				enemy_remove(enemy_state, j); // TODO: Remove healh instead of instant death
+
+				projectiles_remove(projectiles_state, i);
+				goto outer_continue;
+			}
 		}
+		// Check if we're colliding with the player
+		// TODO
 
 		// Check if out of bounds
 		if (!rectangle_contains(SCREEN, projectile->position)) {
 			projectiles_remove(projectiles_state, i);
 		}
+
+		if (projectile->grace_frames > 0) {
+			projectile->grace_frames--;
+		}
+
+		outer_continue:;
 	}
 }
 

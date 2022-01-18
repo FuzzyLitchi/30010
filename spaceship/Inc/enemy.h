@@ -4,7 +4,8 @@
 #include "input.h"
 #include "fixedpoint.h"
 #include "random.h"
-#include "player.h"
+
+#define MAX_ENEMIES 5
 
 typedef enum {
 	ACTION_APPROACHING,
@@ -23,7 +24,6 @@ typedef struct {
 	int time_until_next_action;
 } enemy_t ;
 
-#define MAX_ENEMIES 5
 
 typedef struct {
 	int count;
@@ -31,8 +31,15 @@ typedef struct {
 } enemy_state_t;
 
 
-enemy_state_t enemy_init();
+// I have to move some of the includes down here, because there's a circular
+// dependency between the types for the methods. I really feel like C compilers
+// shouldn't be having this problem with modern compilers, but there's probably
+// some arcane reason they can't modify the header parser to lazily parse type
+// names. My solution to this problem is inspired by:
+// https://stackoverflow.com/questions/46150724/circular-dependency-between-c-header-files
+#include "player.h"
 
+enemy_state_t enemy_init();
 
 void enemy_add(enemy_state_t* enemy_state, enemy_t enemy);
 void enemy_remove(enemy_state_t* enemy_state, int index);

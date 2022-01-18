@@ -105,7 +105,8 @@ void enemy_update(
 				projectile_t projectile = {
 					.position = enemy->position,
 					.velocity = direction,
-					.color = 95
+					.color = 95,
+					.grace_frames = 15
 				};
 				projectiles_add(projectile_state, projectile);
 				acceleration.x -= enemy->velocity.x;

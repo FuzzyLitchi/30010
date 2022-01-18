@@ -86,7 +86,7 @@ int main(void) {
     	// Update world
     	player_update(&player_state, &input_state, &projectiles_state);
     	enemy_update(&enemy_state, &projectiles_state, &player_state, &random_state);
-    	projectiles_update(&projectiles_state);
+    	projectiles_update(&projectiles_state, &player_state, &enemy_state);
 
     	// Render world (into buffer)
     	enemy_draw(&enemy_state, &graphics_state);
