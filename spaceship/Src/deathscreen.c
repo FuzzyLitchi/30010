@@ -32,22 +32,22 @@ deathscreen_state_t deathscreen_enter(
 			{
 				.sprite = O_sprite,
 				.x = 29,
-				.y = 33
+				.y = 32
 			},
 			{
 				.sprite = V_sprite,
 				.x = 35,
-				.y = 33
+				.y = 32
 			},
 			{
 				.sprite = E_sprite,
 				.x = 41,
-				.y = 33
+				.y = 32
 			},
 			{
 				.sprite = R_sprite,
 				.x = 47,
-				.y = 33
+				.y = 32
 			}
 		}
 	};
@@ -58,7 +58,7 @@ deathscreen_state_t deathscreen_enter(
 		// will blink on.
 		if (random_i32_between(random_state, 0, 1)) {
 			letter->time_until_on = random_i32_between(random_state, 40, 80);
-			letter->time_until_blink = random_i32_between(random_state, 300, 1000);
+			letter->time_until_blink = random_i32_between(random_state, 120, 1000);
 		} else {
 			letter->time_until_on = random_i32_between(random_state, 40, 80);
 			letter->time_until_blink = letter->time_until_on;
@@ -106,6 +106,7 @@ void deathscreen_draw(
 	deathscreen_state_t* deathscreen_state,
 	graphics_state_t* graphics_state
 ) {
+	// Draw the letters
 	for (int i = 0; i < LETTER_COUNT; i++) {
 		letter_t* letter = &deathscreen_state->letters[i];
 		if (letter_is_on(letter)) {

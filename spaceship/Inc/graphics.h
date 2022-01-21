@@ -19,7 +19,7 @@ typedef struct {
 
 graphics_state_t graphics_init();
 void graphics_clear(graphics_state_t* ctx);
-void graphics_show(graphics_state_t* ctx);
+int graphics_show(graphics_state_t* ctx);
 
 void graphics_draw_sprite(graphics_state_t* ctx, sprite_t sprite, int x, int y);
 

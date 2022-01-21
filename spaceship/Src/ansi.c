@@ -46,36 +46,10 @@ void hide_cursor() {
 	printf("\x1B[?25l");
 }
 
-//static char powers_of_ten[] = {1, 10, 100};
-//
-// This function expects 4 bytes of buffer, and returns the
-// amount of bytes written.
-//char radix(char n, char* buffer) {
-//	char bytes_written = 0;
-//	for (int i = 2; i >= 0; i--) {
-//		char digit = (n / powers_of_ten[i]) % 10;
-//		if (digit || bytes_written) {
-//			*buffer = '0' + digit;
-//			buffer++;
-//			bytes_written++;
-//		}
-//	}
-//	*buffer = '\0';
-//
-//	return bytes_written;
-//}
+int set_colors(char fg, char bg) {
+	return printf("\x1B[%d;%dm", fg, bg);
+}
 
-void set_colors(char fg, char bg) {
-//	char buffer[4];
-
-	printf("\x1B[%d;%dm", fg, bg);
-
-	// I was trying to optimize the code, but it wasn't faster
-//    uart_put_string("\x1B[");
-//	radix(fg, (char*) &buffer);
-//	uart_put_string((char*) &buffer);
-//	uart_put_char(';');
-//	radix(bg, (char*) &buffer);
-//	uart_put_string((char*) &buffer);
-//	uart_put_char('m');
+int set_color(char color) {
+	return printf("\x1B[%dm", color);
 }
