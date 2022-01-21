@@ -32,6 +32,7 @@ enemy_state_t enemy_init() {
 		.sprite = enemy_sprite,
 		.position = vector_from_whole(60, 31),
 		.velocity = vector_from_whole(0, 0),
+		.health = 3,
 		.time_until_next_action = 100,
 		.action = ACTION_APPROACHING
 	};
@@ -71,6 +72,21 @@ void enemy_remove(enemy_state_t* enemy_state, int index) {
 	enemy_state->count--;
 }
 
+void enemy_handle_damage(enemy_state_t* enemy_state, int index, int damage) {
+	enemy_t* enemy = &enemy_state->enemies[index];
+	enemy->health -= damage;
+	if (enemy->health <= 0) {
+		// It's dead
+		enemy_remove(enemy_state, index);
+	} else if (enemy->health == 1) {
+		// If we're on our last sliver of health, run away
+		enemy->action = ACTION_FLEEING;
+		enemy->time_until_next_action = 2*30; // 2 secs
+	}
+
+	// We could show the damage taken by flashing here or something.
+}
+
 void enemy_update(
 	enemy_state_t* enemy_state,
 	projectiles_state_t* projectile_state,
@@ -81,8 +97,33 @@ void enemy_update(
 		enemy_t* enemy = &enemy_state->enemies[i];
 
 		if (enemy->time_until_next_action <= 0) {
-			enemy->action = (action_t) random_u64_up_to(random_state, 4);
-			enemy->time_until_next_action = random_i32_between(random_state, 30, 5*30);
+			switch (enemy->action) {
+			case ACTION_APPROACHING:
+				// We always shoot after approaching
+				enemy->action = ACTION_SHOOTING;
+				enemy->time_until_next_action = random_i32_between(random_state, 15*2, 15*5);
+				break;
+			case ACTION_SHOOTING:
+				// After shooting we give the player a break by either moving or drifting.
+				enemy->action = random_u64_up_to(random_state, 1) ? ACTION_IDLE : ACTION_APPROACHING;
+				enemy->time_until_next_action = random_i32_between(random_state, 30, 3*30);
+				break;
+			case ACTION_IDLE:
+				// After giving the player a break we either shoot now, or shoot after approaching
+				enemy->action = random_u64_up_to(random_state, 1) ? ACTION_SHOOTING : ACTION_APPROACHING;
+				if (enemy->action == ACTION_SHOOTING) {
+					enemy->time_until_next_action = random_i32_between(random_state, 15*2, 15*5);
+				} else {
+					enemy->time_until_next_action = random_i32_between(random_state, 30, 3*30);
+				}
+				break;
+			case ACTION_FLEEING:
+				// Roll to be brave!
+				// One in six chance
+				enemy->action = random_u64_up_to(random_state, 6) ? ACTION_FLEEING : ACTION_APPROACHING;
+				enemy->time_until_next_action = 60;
+				break;
+			}
 		}
 
 		vector_t acceleration = vector_from_whole(0, 0);
@@ -97,7 +138,7 @@ void enemy_update(
 			acceleration.y += direction.y;
 			break;
 		case ACTION_SHOOTING:
-			// Only shoot 6 times per second
+			// Only shoot 2 times per second
 			if (enemy->time_until_next_action % 15 == 0) {
 				direction = vector_sub(&player_state->position, &enemy->position);
 				vector_set_length(&direction, BULLET_SPEED);
@@ -108,6 +149,10 @@ void enemy_update(
 					.color = 95,
 					.grace_frames = 15
 				};
+				// Offset the position
+				projectile.position.x += FP_FROM_WHOLE(ENEMY_WIDTH) / 2;
+				projectile.position.y += FP_FROM_WHOLE(ENEMY_HEIGHT) / 2;
+
 				projectiles_add(projectile_state, projectile);
 				acceleration.x -= enemy->velocity.x;
 				acceleration.y -= enemy->velocity.y;

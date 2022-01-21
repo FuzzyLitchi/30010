@@ -82,6 +82,9 @@ void player_update(
 			.velocity = vector_from_whole(30, 0),
 			.grace_frames = 10
 		};
+		// Offset the projectile
+		projectile.position.x += FP_FROM_WHOLE(PLAYER_WIDTH) / 2;
+		projectile.position.y += FP_FROM_WHOLE(PLAYER_HEIGHT) / 2;
 		projectiles_add(projectiles_state, projectile);
 	}
 

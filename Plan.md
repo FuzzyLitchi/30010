@@ -170,5 +170,5 @@ Purple bullets ???
     Bullets have a grace period but only for the relevant id.
 
 ## Death screen
-Add glowy pink stuff
+~~Add glowy pink stuff~~ Couldn't do because of the limitations of UART and my rendering system.
 Add the ability to reset the game

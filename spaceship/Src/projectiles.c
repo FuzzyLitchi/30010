@@ -60,7 +60,7 @@ void projectiles_update(
 
 			if (projectile->grace_frames == 0 && rectangle_contains(collider_box, projectile->position)) {
 				// Hit! Apply damage and delete projectile
-				enemy_remove(enemy_state, j); // TODO: Remove healh instead of instant death
+				enemy_handle_damage(enemy_state, j, 1);
 
 				projectiles_remove(projectiles_state, i);
 				goto outer_continue;

@@ -18,6 +18,7 @@ typedef struct {
 	sprite_t sprite;
 	vector_t position;
 	vector_t velocity;
+	int health;
 
 	// AI State Machine
 	action_t action;
@@ -43,6 +44,8 @@ enemy_state_t enemy_init();
 
 void enemy_add(enemy_state_t* enemy_state, enemy_t enemy);
 void enemy_remove(enemy_state_t* enemy_state, int index);
+
+void enemy_handle_damage(enemy_state_t* enemy_state, int index, int damage);
 
 void enemy_update(
 	enemy_state_t* enemy_state,
