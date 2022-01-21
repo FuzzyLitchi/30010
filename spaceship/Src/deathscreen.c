@@ -1,5 +1,17 @@
 #include "deathscreen.h"
 
+// Without optimization
+// 8 letters = 7 ms.
+// 7 letters = 9 ms.
+// 6 letters = 9 ms.
+// 5 letters = 11 ms.
+// 4 letters = 12 ms.
+// 1.2 ms per letter, 16.8 with no letters
+
+// 0 letters = 18
+
+// Update is free, all cost comes from drawing stuff.
+
 deathscreen_state_t deathscreen_enter(
 	graphics_state_t* graphics_state,
 	random_state_t* random_state
@@ -32,22 +44,22 @@ deathscreen_state_t deathscreen_enter(
 			{
 				.sprite = O_sprite,
 				.x = 29,
-				.y = 33
+				.y = 32
 			},
 			{
 				.sprite = V_sprite,
 				.x = 35,
-				.y = 33
+				.y = 32
 			},
 			{
 				.sprite = E_sprite,
 				.x = 41,
-				.y = 33
+				.y = 32
 			},
 			{
 				.sprite = R_sprite,
 				.x = 47,
-				.y = 33
+				.y = 32
 			}
 		}
 	};
@@ -58,7 +70,7 @@ deathscreen_state_t deathscreen_enter(
 		// will blink on.
 		if (random_i32_between(random_state, 0, 1)) {
 			letter->time_until_on = random_i32_between(random_state, 40, 80);
-			letter->time_until_blink = random_i32_between(random_state, 300, 1000);
+			letter->time_until_blink = random_i32_between(random_state, 120, 1000);
 		} else {
 			letter->time_until_on = random_i32_between(random_state, 40, 80);
 			letter->time_until_blink = letter->time_until_on;
@@ -91,6 +103,8 @@ void deathscreen_update(
 
 int letter_is_on(letter_t* letter) {
 	if (letter->time_until_on > 0) {
+		// FIXME
+		return 1;
 		// Letter is off
 		return 0;
 	}
@@ -98,23 +112,46 @@ int letter_is_on(letter_t* letter) {
 		// Letter is on, and we're not blinking
 		return 1;
 	}
+	return 1;
 	// Every second frame we're gonna blink
 	return (letter->blink_count * 4 + letter->time_until_blink) / 2 % 2;
 }
+
+extern int32_t milliseconds;
 
 void deathscreen_draw(
 	deathscreen_state_t* deathscreen_state,
 	graphics_state_t* graphics_state
 ) {
-	for (int i = 0; i < LETTER_COUNT; i++) {
-		letter_t* letter = &deathscreen_state->letters[i];
-		if (letter_is_on(letter)) {
-			graphics_draw_sprite(
-				graphics_state,
-				letter->sprite,
-				letter->x,
-				letter->y
-			);
+	// Draw the baground gradient
+	for (int y = 0; y < 5; y++) {
+		for (int x = 0; x < 10; x++) {
+			// Calculate bayer matrix index
+			int limit = BAYER_MATRIX[(x % 4) + 4*(y % 4)];
+			if (x > limit) {
+				graphics_state->buffer[x][y] = 95;
+			}
 		}
 	}
+//	int before = milliseconds;
+//	for (int x = 0; x < GRAPHICS_WIDTH; x++) {
+//		for (int y = 0; y < GRAPHICS_HEIGHT; y++) {
+//			graphics_state->buffer[x][y] = 30 + ((x&0b10000) >> 2);
+//		}
+//	}
+//	int after = milliseconds;
+//	int total = after - before;
+
+	// Draw the letters
+//	for (int i = 0; i < 0; i++) {
+//		letter_t* letter = &deathscreen_state->letters[i];
+//		if (letter_is_on(letter)) {
+//			graphics_draw_sprite(
+//				graphics_state,
+//				letter->sprite,
+//				letter->x,
+//				letter->y
+//			);
+//		}
+//	}
 }

@@ -168,3 +168,7 @@ Blue bullets only have self grace
 Purple bullets ???
     Every bullet has a "shooter" id, 0 is player, 1 and up is enemies
     Bullets have a grace period but only for the relevant id.
+
+## Death screen
+Add glowy pink stuff
+Add the ability to reset the game

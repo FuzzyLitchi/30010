@@ -70,8 +70,8 @@ int main(void) {
     clrscr();
     hide_cursor();
 
-    gamestate_t gamestate = PLAYING;
-    gamestate_t previous_gamestate = gamestate;
+    gamestate_t gamestate = DEATH_SCREEN;
+    gamestate_t previous_gamestate = PLAYING;
 
     random_state_t random_state = random_init();
     graphics_state_t graphics_state = graphics_init();
@@ -107,7 +107,7 @@ int main(void) {
 			projectiles_draw(&projectiles_state, &graphics_state);
 			break;
 		case DEATH_SCREEN:
-			deathscreen_update(&deathscreen_state, &random_state);
+			//deathscreen_update(&deathscreen_state, &random_state);
 			deathscreen_draw(&deathscreen_state, &graphics_state);
 			break;
 		case HELP_SCREEN:
@@ -116,7 +116,7 @@ int main(void) {
 		}
 
     	// Send rendered world over USART
-    	graphics_show(&graphics_state);
+    	int bytes_sent = graphics_show(&graphics_state);
 
     	// Clean (get ready for next frame)
     	frame++;
@@ -146,12 +146,13 @@ int main(void) {
     	// Debug info
     	set_colors(32, 40);
     	printf("     Frame: %d\n", frame-1);
-    	printf("   ms left: %ld\n", (frame)*FRAME_DURATION - milliseconds);
+    	printf("   ms left: %ld \n", (frame)*FRAME_DURATION - milliseconds);
     	uart_put_string("This frame: ");
     	print_binary(input_state.current_frame);
     	uart_put_string("\n\rLast frame: ");
     	print_binary(input_state.last_frame);
     	uart_put_string("\n\r");
+    	printf("Bytes sent: %d ", bytes_sent);
 #endif
 
     	// wait until next frame
@@ -160,4 +161,3 @@ int main(void) {
     	}
     }
 }
-

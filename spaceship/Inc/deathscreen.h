@@ -116,6 +116,16 @@ static const sprite_t R_sprite = {
 	.height = 5
 };
 
+// To draw a gradient from pink to black we use ordered dithering / bayer matrix dithering
+// https://en.wikipedia.org/wiki/Ordered_dithering
+// https://www.youtube.com/watch?v=IviNO7iICTM
+static const char BAYER_MATRIX[16] = {
+	  0,128, 32,160,
+	192, 64,224, 96,
+	 48,176,255,144,
+	240,112,208, 80
+};
+
 deathscreen_state_t deathscreen_enter(
 	graphics_state_t* graphics_state,
 	random_state_t* random_state

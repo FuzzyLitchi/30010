@@ -65,10 +65,10 @@ void hide_cursor() {
 //	return bytes_written;
 //}
 
-void set_colors(char fg, char bg) {
+int set_colors(char fg, char bg) {
 //	char buffer[4];
 
-	printf("\x1B[%d;%dm", fg, bg);
+	return printf("\x1B[%d;%dm", fg, bg);
 
 	// I was trying to optimize the code, but it wasn't faster
 //    uart_put_string("\x1B[");
@@ -78,4 +78,8 @@ void set_colors(char fg, char bg) {
 //	radix(bg, (char*) &buffer);
 //	uart_put_string((char*) &buffer);
 //	uart_put_char('m');
+}
+
+int set_color(char color) {
+	return printf("\x1B[%dm", color);
 }

@@ -22,7 +22,10 @@ void graphics_clear(graphics_state_t* graphics_state) {
 }
 
 // Turns the buffer into commands and sends it over USART
-void graphics_show(graphics_state_t* ctx) {
+int graphics_show(graphics_state_t* ctx) {
+	// DEBUG
+	int total_bytes = 3; // home_cursor is 3 bytes.
+
 	// Set to some value that represents no color
 	char previous_bg_color = 255;
 	char previous_fg_color = 255;
@@ -34,17 +37,25 @@ void graphics_show(graphics_state_t* ctx) {
 		    char fg = ctx->buffer[x][y+1];
 			if (bg == previous_bg_color && fg == previous_fg_color) {
 				// Do nothing :)
+			} else if (bg == previous_bg_color) {
+				total_bytes += set_color(fg);
+			} else if (fg == previous_fg_color) {
+				total_bytes += set_color(bg + 10);
 			} else {
-				set_colors(fg, bg + 10);
+				total_bytes += set_colors(fg, bg + 10);
 			}
 			uart_put_char('\xDC');
+			total_bytes++;
 
 			previous_bg_color = bg;
 			previous_fg_color = fg;
 		}
 		uart_put_char('\r');
 		uart_put_char('\n');
+		total_bytes += 2;
 	}
+
+	return total_bytes;
 }
 
 int min(int a, int b) {
