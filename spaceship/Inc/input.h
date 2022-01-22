@@ -2,6 +2,7 @@
 #define _INPUT_H_
 #include <stdint.h>
 
+#define KEY_H 9
 #define KEY_SPACE 8
 #define KEY_W 7
 #define KEY_A 6

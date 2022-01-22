@@ -9,6 +9,7 @@ typedef struct {
 	char buffer[GRAPHICS_WIDTH][GRAPHICS_HEIGHT];
 	// We use this color to clear the screen
 	char background_color;
+	int enabled;
 } graphics_state_t;
 
 typedef struct {

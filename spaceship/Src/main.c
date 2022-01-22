@@ -9,8 +9,9 @@
 #include "player.h"
 #include "enemy.h"
 #include "projectiles.h"
-#include "deathscreen.h"
 #include "gamestate.h"
+#include "deathscreen.h"
+#include "help_screen.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33
@@ -100,6 +101,8 @@ int main(void) {
 			);
 			enemy_update(&enemy_state, &projectiles_state, &player_state, &random_state);
 			projectiles_update(&projectiles_state, &player_state, &enemy_state);
+			// So that we can enter the help screen.
+			help_screen_update(&input_state, &gamestate);
 
 			// Render world (into buffer)
 			enemy_draw(&enemy_state, &graphics_state);
@@ -111,12 +114,16 @@ int main(void) {
 			deathscreen_draw(&deathscreen_state, &graphics_state);
 			break;
 		case HELP_SCREEN:
-			// TODO
+			help_screen_update(&input_state, &gamestate);
+			help_screen_draw(&graphics_state);
 			break;
 		}
 
-    	// Send rendered world over USART
-    	int bytes_sent = graphics_show(&graphics_state);
+		int bytes_sent = 0;
+		if (graphics_state.enabled) {
+			// Send rendered world over USART
+			bytes_sent = graphics_show(&graphics_state);
+		}
 
     	// Clean (get ready for next frame)
     	frame++;
@@ -127,6 +134,10 @@ int main(void) {
 
     		// Call exit functions
     		switch (previous_gamestate) {
+    		case HELP_SCREEN:
+    			// Re-enable the normal graphics system.
+    			graphics_state.enabled = 1;
+    			break;
     		default:
     			break;
     		}
@@ -135,6 +146,11 @@ int main(void) {
     		switch (gamestate) {
     		case DEATH_SCREEN:
     			deathscreen_state = deathscreen_enter(&graphics_state, &random_state);
+    			break;
+    		case HELP_SCREEN:
+    			// Disable the normal graphics system.
+    			graphics_state.enabled = 0;
+    			break;
     		default:
     			break;
     		}

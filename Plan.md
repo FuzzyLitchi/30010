@@ -107,7 +107,7 @@ What features/tasks I will do when.
 - [X] Player damage/health/death
 - [X] Death screen
 - [ ] Boss key (Måske)
-- [ ] Help screen
+- [X] Help screen
 
 MVP, write on report. Flowchart + Blokdiagram.
 
@@ -149,16 +149,17 @@ I might need additional time as this is a pretty crammed timeline.
 
 # Improvements
 
-Make the firing phase for AI only fire a max of 5 shots.
+Make the firing phase for AI only fire a max of 5 shots. (x)
 
 ## AI plan
-Firing -> (Idle, Approaching)
-Idle -> (Approaching, Firing)
-Approaching -> Firing
+Firing -> (Idle, Approaching) (x)
+Idle -> (Approaching, Firing) (x)
+Approaching -> Firing (x)
 
-Flee -> (Flee, Firing)
-Damage   => Flee (sometimes, when under a health limit)
+Flee -> (Flee, Firing) (x)
+Damage   => Flee (sometimes, when under a health limit) (x)
 0 health => Dying (plays little animation and the removes self)
+
 
 When ships are outside the screen, they shouldn't be able to fire. But it would be cool if they could come back. I might just make ships that go off screen vanish, as that is easiest. But they'd only vanish if they're Fleeing.
 

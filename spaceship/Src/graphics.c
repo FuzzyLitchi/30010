@@ -6,7 +6,8 @@
 
 graphics_state_t graphics_init() {
 	graphics_state_t ctx = {
-		.background_color = 90 // Grey
+		.background_color = 90, // Grey
+		.enabled = 1
 	};
 	graphics_clear(&ctx);
 	return ctx;

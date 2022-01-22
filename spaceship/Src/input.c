@@ -52,6 +52,10 @@ void input_update(input_state_t* state) {
 		case ' ':
 			current |= 1 << KEY_SPACE;
 			break;
+		case 'H':
+		case 'h':
+			current |= 1 << KEY_H;
+			break;
 		// Up =    "\x1b[A"
 		// Down =  "\x1b[B"
 		// Right = "\x1b[C"
