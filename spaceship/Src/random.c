@@ -101,7 +101,3 @@ uint64_t random_u64_up_to(random_state_t *state, uint64_t bound) {
 int32_t random_i32_between(random_state_t *state, int32_t min, int32_t max) {
 	return min + (int32_t) random_u64_up_to(state, max - min);
 }
-
-int random_bool(random_state_t* state) {
-
-}

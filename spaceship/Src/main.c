@@ -1,11 +1,16 @@
-#include <ansi.h>
-#include <gpio.h>
+// HAL
 #include "stm32f30x_conf.h" // STM32 config
 #include "30010_io.h" 		// Input/output library for this course
+#include "gpio.h"
+
+// API
+#include "ansi.h"
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
 #include "random.h"
+
+// AP
 #include "player.h"
 #include "enemy.h"
 #include "projectiles.h"
