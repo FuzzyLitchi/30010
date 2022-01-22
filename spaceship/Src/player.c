@@ -80,7 +80,7 @@ void player_update(
 			.color = 36,
 			.position = player_state->position,
 			.velocity = vector_from_whole(30, 0),
-			.grace_frames = 10
+			.grace_frames = 5
 		};
 		// Offset the projectile
 		projectile.position.x += FP_FROM_WHOLE(PLAYER_WIDTH) / 2;

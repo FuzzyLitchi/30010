@@ -16,10 +16,18 @@ static char data[] = {
 #define ENEMY_WIDTH 6
 #define ENEMY_HEIGHT 5
 
-#define ENEMY_SPEED FP_FROM_WHOLE(20)
+#define ENEMY_SPEED FP_FROM_WHOLE(15)
 #define ENEMY_FRICTION_INV 50
 
-#define BULLET_SPEED FP_FROM_WHOLE(20)
+#define BULLET_SPEED FP_FROM_WHOLE(25)
+
+// If enemies go outside this area they vanish
+const rectangle_t ENEMY_AREA = {
+	FP_FROM_WHOLE(-10),
+	FP_FROM_WHOLE(-10),
+	FP_FROM_WHOLE(GRAPHICS_WIDTH+10),
+	FP_FROM_WHOLE(GRAPHICS_HEIGHT+10)
+};
 
 static sprite_t enemy_sprite = {
 	.width = 6,
@@ -28,26 +36,10 @@ static sprite_t enemy_sprite = {
 };
 
 enemy_state_t enemy_init() {
-	enemy_t enemy = {
-		.sprite = enemy_sprite,
-		.position = vector_from_whole(60, 31),
-		.velocity = vector_from_whole(0, 0),
-		.health = 3,
-		.time_until_next_action = 100,
-		.action = ACTION_APPROACHING
-	};
-
 	enemy_state_t enemy_state = {
-		.count = 1,
-		.enemies = {enemy}
+		.count = 0,
+		.enemies = {}
 	};
-
-	enemy.position = vector_from_whole(60, 10);
-
-	enemy_add(&enemy_state, enemy);
-	enemy_add(&enemy_state, enemy);
-	enemy_add(&enemy_state, enemy);
-	enemy_add(&enemy_state, enemy);
 
 	return enemy_state;
 }
@@ -93,6 +85,21 @@ void enemy_update(
 	player_state_t* player_state,
 	random_state_t* random_state
 ) {
+	if (enemy_state->count < MAX_ENEMIES && random_u64_up_to(random_state, 100) == 0) {
+		enemy_t new_enemy = {
+			.sprite = enemy_sprite,
+			.velocity = vector_from_whole(0, 0),
+			.health = 3,
+			.time_until_next_action = random_i32_between(random_state, 30, 90),
+			.action = ACTION_APPROACHING
+		};
+
+		new_enemy.position.x = FP_FROM_WHOLE(GRAPHICS_WIDTH);
+		new_enemy.position.y = random_i32_between(random_state, 0, FP_FROM_WHOLE(GRAPHICS_HEIGHT));
+		enemy_add(enemy_state, new_enemy);
+	}
+
+	// Update each enemy
 	for (int i = enemy_state->count - 1; i >= 0; i--) {
 		enemy_t* enemy = &enemy_state->enemies[i];
 
@@ -147,7 +154,7 @@ void enemy_update(
 					.position = enemy->position,
 					.velocity = direction,
 					.color = 95,
-					.grace_frames = 15
+					.grace_frames = 7
 				};
 				// Offset the position
 				projectile.position.x += FP_FROM_WHOLE(ENEMY_WIDTH) / 2;
@@ -181,12 +188,11 @@ void enemy_update(
 		enemy->position.x += enemy->velocity.x / 30;
 		enemy->position.y += enemy->velocity.y / 30;
 
-		// Limit position
-		clamp_vector(
-			&enemy->position,
-			vector_from_whole(0, 0),
-			vector_from_whole(GRAPHICS_WIDTH-ENEMY_WIDTH, GRAPHICS_HEIGHT-ENEMY_HEIGHT)
-		);
+		// If enemies are too far away we remove them
+		if (!rectangle_contains(ENEMY_AREA, enemy->position)) {
+			enemy_remove(enemy_state, i);
+		}
+
 		enemy->time_until_next_action -= 1;
 	}
 }
