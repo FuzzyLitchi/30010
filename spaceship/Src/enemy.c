@@ -153,8 +153,7 @@ void enemy_update(
 				projectile_t projectile = {
 					.position = enemy->position,
 					.velocity = direction,
-					.color = 95,
-					.grace_frames = 7
+					.color = 95
 				};
 				// Offset the position
 				projectile.position.x += FP_FROM_WHOLE(ENEMY_WIDTH) / 2;

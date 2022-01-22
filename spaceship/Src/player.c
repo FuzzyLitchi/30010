@@ -77,10 +77,9 @@ void player_update(
 	// Shooting
 	if (just_pressed(input_state, KEY_SPACE)) {
 		projectile_t projectile = {
-			.color = 36,
 			.position = player_state->position,
 			.velocity = vector_from_whole(30, 0),
-			.grace_frames = 5
+			.color = 36,
 		};
 		// Offset the projectile
 		projectile.position.x += FP_FROM_WHOLE(PLAYER_WIDTH) / 2;

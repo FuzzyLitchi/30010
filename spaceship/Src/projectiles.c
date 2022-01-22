@@ -58,7 +58,7 @@ void projectiles_update(
 				.h = FP_FROM_WHOLE(enemy->sprite.height)
 			};
 
-			if (projectile->grace_frames == 0 && rectangle_contains(collider_box, projectile->position)) {
+			if (projectile->color == 36 && rectangle_contains(collider_box, projectile->position)) {
 				// Hit! Apply damage and delete projectile
 				enemy_handle_damage(enemy_state, j, 1);
 
@@ -74,7 +74,7 @@ void projectiles_update(
 			.h = FP_FROM_WHOLE(player_state->sprite.height)
 		};
 
-		if (projectile->grace_frames == 0 && rectangle_contains(collider_box, projectile->position)) {
+		if (projectile->color == 95 && rectangle_contains(collider_box, projectile->position)) {
 			// Hit! Apply damage and delete projectile
 			player_state->health--; // 1 damage.
 
@@ -85,10 +85,6 @@ void projectiles_update(
 		// Check if out of bounds
 		if (!rectangle_contains(SCREEN, projectile->position)) {
 			projectiles_remove(projectiles_state, i);
-		}
-
-		if (projectile->grace_frames > 0) {
-			projectile->grace_frames--;
 		}
 
 		outer_continue:;

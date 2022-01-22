@@ -9,10 +9,6 @@ typedef struct {
 	vector_t position;
 	vector_t velocity;
 	uint8_t color;
-	// When spawning the projectile, it won't check for collisions
-	// the first few frames. This way the projectile doesn't collide
-	// with the person who fired it.
-	uint8_t grace_frames;
 } projectile_t;
 
 typedef struct {
