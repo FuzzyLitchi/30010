@@ -1,4 +1,4 @@
-#include <death_screen.h>
+#include "death_screen.h"
 
 death_screen_state_t death_screen_enter(
 	graphics_state_t* graphics_state,

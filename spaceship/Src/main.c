@@ -1,6 +1,4 @@
 // HAL
-#include <death_screen.h>
-#include <game_state.h>
 #include "stm32f30x_conf.h" // STM32 config
 #include "30010_io.h" 		// Input/output library for this course
 #include "gpio.h"
@@ -13,10 +11,12 @@
 #include "random.h"
 
 // AP
+#include "game_state.h"
 #include "player.h"
 #include "enemy.h"
 #include "projectiles.h"
 #include "help_screen.h"
+#include "death_screen.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
 #define FRAME_DURATION 33

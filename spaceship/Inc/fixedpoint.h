@@ -8,11 +8,11 @@
 #define FP_TOTAL_BITS 32
 
 // Get the whole or the fracitonal part
-#define FP_WHOLE(n) ((int32_t) (n >> FP_DECIMAL_BITS))
-#define FP_FRACTIONAL(n) (n & ((1 << FP_DECIMAL_BITS)-1))
+#define FP_WHOLE(n) ((int32_t) ((n) >> FP_DECIMAL_BITS))
+#define FP_FRACTIONAL(n) ((n) & ((1 << FP_DECIMAL_BITS)-1))
 
 // Create a new fixed point value from a whole number
-#define FP_FROM_WHOLE(n) (n << FP_DECIMAL_BITS)
+#define FP_FROM_WHOLE(n) ((n) << FP_DECIMAL_BITS)
 
 typedef int32_t fixedpoint_t;
 

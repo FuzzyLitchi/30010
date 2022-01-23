@@ -1,6 +1,6 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
-#include <game_state.h>
+#include "game_state.h"
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
