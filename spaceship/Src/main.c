@@ -68,17 +68,10 @@ void print_binary(uint16_t value) {
 }
 
 int main(void) {
-	uart_init(2048000);
-	timer_init();
-
-	// Set the background color to black so that we clear with black.
-	set_colors(37, 40);
-	clrscr();
-	hide_cursor();
-
 	gamestate_t gamestate = PLAYING;
 	gamestate_t previous_gamestate = PLAYING;
 
+	timer_init();
 	random_state_t random_state = random_init();
 	graphics_state_t graphics_state = graphics_init();
 	input_state_t input_state = input_init();

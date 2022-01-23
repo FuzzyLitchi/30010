@@ -13,8 +13,8 @@ void set_output(GPIO_TypeDef *gpio, char pin);
 
 void write_output(GPIO_TypeDef *gpio, char pin, char value);
 
-// Order is Center, Right, Left, Down, Up
-// 0bRLDU
+// Order is Middle, Right, Left, Down, Up
+// 0bMRLDU
 char read_joystick();
 
 void init_joystick();

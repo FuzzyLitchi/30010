@@ -5,6 +5,13 @@
 #define GRAPHICS_TRANSPARENT 0
 
 graphics_state_t graphics_init() {
+	// Setup uart connections
+	uart_init(2048000);
+	// Set the background color to black so that we clear with black.
+	set_colors(37, 40);
+	clrscr();
+	hide_cursor();
+
 	graphics_state_t ctx = {
 		.background_color = 90, // Grey
 		.enabled = 1
