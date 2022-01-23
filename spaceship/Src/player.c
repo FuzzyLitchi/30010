@@ -35,7 +35,7 @@ void player_update(
 	player_state_t* player_state,
 	input_state_t* input_state,
 	projectiles_state_t* projectiles_state,
-	gamestate_t* gamestate
+	game_state_t* gamestate
 ) {
 	vector_t acceleration = vector_from_whole(0, 0);
 

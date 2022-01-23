@@ -1,4 +1,6 @@
 // HAL
+#include <death_screen.h>
+#include <game_state.h>
 #include "stm32f30x_conf.h" // STM32 config
 #include "30010_io.h" 		// Input/output library for this course
 #include "gpio.h"
@@ -14,8 +16,6 @@
 #include "player.h"
 #include "enemy.h"
 #include "projectiles.h"
-#include "gamestate.h"
-#include "deathscreen.h"
 #include "help_screen.h"
 
 // We pick to run our game at 30 Hz, which means each frame is 33.33 ms
@@ -68,8 +68,8 @@ void print_binary(uint16_t value) {
 }
 
 int main(void) {
-	gamestate_t gamestate = PLAYING;
-	gamestate_t previous_gamestate = PLAYING;
+	game_state_t gamestate = PLAYING;
+	game_state_t previous_gamestate = PLAYING;
 
 	timer_init();
 	random_state_t random_state = random_init();
@@ -80,7 +80,7 @@ int main(void) {
 	enemy_state_t enemy_state = enemy_init();
 	projectiles_state_t projectiles_state = projectiles_init();
 
-	deathscreen_state_t deathscreen_state;
+	death_screen_state_t deathscreen_state;
 
 	// The current frame we're on
 	int frame = 0;
@@ -108,8 +108,8 @@ int main(void) {
 			projectiles_draw(&projectiles_state, &graphics_state);
 			break;
 		case DEATH_SCREEN:
-			deathscreen_update(&deathscreen_state, &random_state);
-			deathscreen_draw(&deathscreen_state, &graphics_state);
+			death_screen_update(&deathscreen_state, &random_state);
+			death_screen_draw(&deathscreen_state, &graphics_state);
 			break;
 		case HELP_SCREEN:
 			help_screen_update(&input_state, &gamestate);
@@ -143,7 +143,7 @@ int main(void) {
 			// Call enter functions
 			switch (gamestate) {
 			case DEATH_SCREEN:
-				deathscreen_state = deathscreen_enter(&graphics_state, &random_state);
+				deathscreen_state = death_screen_enter(&graphics_state, &random_state);
 				break;
 			case HELP_SCREEN:
 				// Disable the normal graphics system.

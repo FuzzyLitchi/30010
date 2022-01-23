@@ -1,5 +1,5 @@
-#ifndef _DEATHSCREEN_H_
-#define _DEAHTSCREEN_H_
+#ifndef _DEATH_SCREEN_H_
+#define _DEAHT_SCREEN_H_
 #include "graphics.h"
 #include "random.h"
 
@@ -16,7 +16,7 @@ typedef struct {
 
 typedef struct {
 	letter_t letters[LETTER_COUNT];
-} deathscreen_state_t ;
+} death_screen_state_t ;
 
 static const char G_DATA[] = {
 	 0, 97, 97, 97, 97,
@@ -116,18 +116,18 @@ static const sprite_t R_sprite = {
 	.height = 5
 };
 
-deathscreen_state_t deathscreen_enter(
+death_screen_state_t death_screen_enter(
 	graphics_state_t* graphics_state,
 	random_state_t* random_state
 );
 
-void deathscreen_update(
-	deathscreen_state_t* deathscreen_state,
+void death_screen_update(
+	death_screen_state_t* deathscreen_state,
 	random_state_t* random_state
 );
 
-void deathscreen_draw(
-	deathscreen_state_t* deathscreen_state,
+void death_screen_draw(
+	death_screen_state_t* deathscreen_state,
 	graphics_state_t* graphics_state
 );
 

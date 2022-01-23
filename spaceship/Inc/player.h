@@ -1,9 +1,9 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
+#include <game_state.h>
 #include "graphics.h"
 #include "input.h"
 #include "fixedpoint.h"
-#include "gamestate.h"
 
 typedef struct {
 	sprite_t sprite;
@@ -30,7 +30,7 @@ void player_update(
 	player_state_t* player_state,
 	input_state_t* input_state,
 	projectiles_state_t* projectiles_state,
-	gamestate_t* gamestate
+	game_state_t* gamestate
 );
 
 void player_draw(

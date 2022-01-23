@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "30010_io.h": "c",
-        "stm32f30x_conf.h": "c"
+        "stm32f30x_conf.h": "c",
+        "gamestate.h": "c"
     }
 }

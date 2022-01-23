@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "ansi.h"
 
-void help_screen_update(input_state_t* input_state, gamestate_t* gamestate) {
+void help_screen_update(input_state_t* input_state, game_state_t* gamestate) {
 	if (just_pressed(input_state, KEY_H)) {
 		switch (*gamestate) {
 		case PLAYING:

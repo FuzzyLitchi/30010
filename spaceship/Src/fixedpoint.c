@@ -41,6 +41,14 @@ int32_t fp_round(fixedpoint_t n) {
 	return o;
 }
 
+fixedpoint_t fp_min(fixedpoint_t a, fixedpoint_t b) {
+    return a<b ? a : b;
+}
+
+fixedpoint_t fp_max(fixedpoint_t a, fixedpoint_t b) {
+    return a>b ? a : b;
+}
+
 // Debug print a fixed point value.
 void fp_print(fixedpoint_t n) {
     if (n < 0) {
@@ -79,14 +87,6 @@ vector_t vector_sub(vector_t* a, vector_t* b) {
 	res.x = a->x - b->x;
 	res.y = a->y - b->y;
 	return res;
-}
-
-fixedpoint_t fp_min(fixedpoint_t a, fixedpoint_t b) {
-    return a<b ? a : b;
-}
-
-fixedpoint_t fp_max(fixedpoint_t a, fixedpoint_t b) {
-    return a>b ? a : b;
 }
 
 void clamp_vector(vector_t* vector, vector_t lower_bound, vector_t upper_bound) {
