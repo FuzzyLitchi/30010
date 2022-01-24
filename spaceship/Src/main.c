@@ -32,14 +32,6 @@ void TIM2_IRQHandler() {
 	TIM2->SR &= ~0x0001;
 }
 
-void print_formated_centiseconds(int32_t now) {
-	char centis = now % 100;
-	char seconds = (now / 100) % 60;
-	char minutes = (now / 6000) % 60;
-	char hours = (now / 360000) % 24;
-	printf("%02d:%02d:%02d.%03d\n", hours, minutes, seconds, centis);
-}
-
 void timer_init() {
 	// Set up clock with 100Hz frequency
 	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2
@@ -170,8 +162,6 @@ int main(void) {
 #endif
 
 		// wait until next frame
-		while (milliseconds < frame * FRAME_DURATION) {
-
-		}
+		while (milliseconds < frame * FRAME_DURATION) {}
 	}
 }
